@@ -1,0 +1,27 @@
+{
+  "name": "facecardpro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@alicloud/sms-sdk": "^1.1.1",
+    "baidu-aip-sdk": "^2.3.1",
+    "base64-img": "^1.0.4",
+    "china-time": "^0.12.3",
+    "connect-redis": "^3.3.3",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "formidable": "^1.2.1",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
+    "mongoose": "^5.1.4",
+    "redis-connector": "0.0.0-deprecate",
+    "shortid": "^2.2.8"
+  }
+}
