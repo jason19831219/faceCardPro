@@ -40,7 +40,7 @@ let sessionConfig = {
 app.use(session(sessionConfig));
 
 app.use("/public", express.static("./public"));
-app.use("/web-admin", express.static("./web-admin/dist"));
+app.use("/www-admin", express.static("./www-admin/dist"));
 app.use("/face-test", express.static("./face-test/dist"));
 app.use(express.static("./web-www/dist"));
 app.use("/api", api);
@@ -63,8 +63,6 @@ app.get("*", function(req, res) {
 
 var privateKey  = fs.readFileSync("./utils/1527853852909.key");
 var certificate = fs.readFileSync("./utils/1527853852909.pem");
-// var privateKey  = fs.readFileSync("./utils/1528049153992.key");
-// var certificate = fs.readFileSync("./utils/1528049153992.pem");
 var credentials = {key: privateKey, cert: certificate};
 
 var httpServer = http.createServer(app);
