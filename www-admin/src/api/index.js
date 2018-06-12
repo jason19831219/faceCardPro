@@ -34,7 +34,7 @@ function checkStatus (response) {
 
 function checkCode (res) {
   if (res.status === -500) {
-    window.location.href = '/moji-admin'
+    window.location.href = '/www-admin'
   } else if (res.status === -400) {
     window.location.href = '/'
   } else if (res.status !== 200) {
