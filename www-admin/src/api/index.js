@@ -14,11 +14,11 @@ axios.interceptors.response.use(response => response, error => Promise.resolve(e
 
 function checkStatus (response) {
   if (response.status === 401) {
-    localStorage.removeItem('MOJI_ANYWAY_TOKEN')
+    localStorage.removeItem('FACE_CARD_PRO_TOKEN')
     window.location.href = '/'
   }
   if (response.status === 501) {
-    window.location.href = '/moji-admin'
+    window.location.href = '/www-admin'
   }
   if (response.status === 200 || response.status === 304) {
     return response
