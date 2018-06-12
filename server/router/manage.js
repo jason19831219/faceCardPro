@@ -28,13 +28,18 @@ var API_KEY = settings.aip_api_key;
 var SECRET_KEY = settings.aip_secret_key;
 
 
-router.use(function(req, res, next) {
-	if(req.signedCookies[settings.admin_auth_cookie_name]) {}
-	next();
-});
+// router.use(function(req, res, next) {
+// 	if(req.signedCookies[settings.admin_auth_cookie_name]) {
+//         next();
+// 	}
+//
+// });
+router.get("/admin/getAll",authAdmin, Admin.getAll);
 router.post("/admin/addOne",authAdmin, Admin.addOne);
+router.post("/admin/updateOne",authAdmin, Admin.updateOne);
+router.get("/admin/deleteOne",authAdmin, Admin.deleteOne);
 router.post("/admin/login", Admin.login);
-router.post("/admin/logOut", Admin.logOut);
+router.post("/admin/logOut",authAdmin, Admin.logOut);
 
 
 router.get("/article/getAll", authAdmin, Article.getAll);

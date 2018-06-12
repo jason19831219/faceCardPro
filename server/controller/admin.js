@@ -69,12 +69,36 @@ class Admin {
 
     }
 
+    async getAll(req, res, next) {
+        let pageNumber = req.query.pageNumber || 1;
+        let pageSize = req.query.pageSize || 10;
+        let searchKey = req.query.searchKey;
+        let queryObj = {};
+        if (searchKey) {
+            let reKey = new RegExp(searchKey, 'i')
+            queryObj.content = {$regex: reKey}
+        }
+        const admins = await AdminModel.find(queryObj).populate("password", "-salt").sort({
+            updateDate: -1
+        }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
+        const totalItems = await AdminModel.count(queryObj);
+        res.send({
+            state: 'success',
+            list: admins,
+            pageInfo: {
+                totalItems,
+                pageNumber: Number(pageNumber) || 1,
+                pageSize: Number(pageSize) || 10,
+                searchKey: searchKey || ''
+            }
+        })
+    }
+
     async addOne(req, res, next) {
         var fields = req.body
         try {
             service.checkFormData(fields);
         } catch (err) {
-            console.log(err.message, err);
             res.send({
                 state: 'error',
                 type: 'ERROR_PARAMS',
@@ -119,54 +143,61 @@ class Admin {
         }
     }
 
-    // async updateAdminUser(req, res, next) {
-    //   const form = new formidable.IncomingForm();
-    //   form.parse(req, async (err, fields, files) => {
-    //     try {
-    //       checkFormData(req, res, fields);
-    //     } catch (err) {
-    //       console.log(err.message, err);
-    //       res.send({
-    //         state: 'error',
-    //         type: 'ERROR_PARAMS',
-    //         message: err.message
-    //       })
-    //       return
-    //     }
-    //
-    //     const userObj = {
-    //       userName: fields.userName,
-    //       name: fields.name,
-    //       email: fields.email,
-    //       phoneNum: fields.phoneNum,
-    //       password: fields.password,
-    //       confirm: fields.confirm,
-    //       group: fields.group,
-    //       enable: fields.enable,
-    //       comments: fields.comments
-    //     }
-    //     const item_id = fields._id;
-    //     try {
-    //       await AdminUserModel.findOneAndUpdate({
-    //         _id: item_id
-    //       }, {
-    //         $set: userObj
-    //       });
-    //       res.send({
-    //         state: 'success'
-    //       });
-    //     } catch (err) {
-    //       logUtil.error(err, req);
-    //       res.send({
-    //         state: 'error',
-    //         type: 'ERROR_IN_SAVE_DATA',
-    //         message: '更新数据失败:',
-    //       })
-    //     }
-    //   })
-    //
-    // }
-    //
+    async updateOne(req, res, next) {
+        var fields = req.body;
+        try {
+            service.checkFormData(fields);
+        } catch (err) {
+            res.send({
+                state: 'error',
+                type: 'ERROR_PARAMS',
+                message: err.message
+            })
+            return
+        }
+
+        try {
+            const adminObj = await AdminModel.findById(fields._id);
+            delete adminObj._id
+            console.log(adminObj)
+            adminObj.setPassword(fields.password);
+            await AdminModel.findOneAndUpdate({ _id: fields._id }, { $set: adminObj });
+            res.send({
+                state: 'success',
+                message: '更新成功',
+            });
+        } catch (err) {
+            res.send({
+                state: 'error',
+                message: '更新失败:',
+            })
+        }
+    }
+    async deleteOne(req, res, next) {
+        try {
+            let errMsg = '';
+            if (!service.checkIds(req.query.ids)) {
+                errMsg = '非法请求，请稍后重试！';
+            }
+            if (errMsg) {
+                res.send({
+                    state: 'error',
+                    message: errMsg
+                })
+            }
+            await AdminModel.remove({ _id: req.query.ids });
+            res.send({
+                state: 'success'
+            });
+        } catch (err) {
+            res.send({
+                state: 'error',
+                type: 'ERROR_IN_SAVE_DATA',
+                message: '删除数据失败:' + err,
+            })
+        }
+    }
+
     async logOut(req, res, next) {
         req.session.destroy();
         res.clearCookie(settings.auth_cookie_name, {path: '/'});

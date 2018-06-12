@@ -3,10 +3,10 @@
     <el-container>
       <el-header>Header</el-header>
       <el-container>
-        <el-aside width="200px">
+        <el-aside width="220px">
           <nav-menu></nav-menu>
         </el-aside>
-        <el-main>
+        <el-main width="220px" justify="left">
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -38,5 +38,8 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+  }
+  .el-main{
+    text-align: left;
   }
 </style>

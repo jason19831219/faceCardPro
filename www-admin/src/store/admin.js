@@ -1,8 +1,16 @@
 import api from '@/api'
+import { Message } from 'element-ui'
 import validatorUtil from '@/utils/validation'
 
 const state = () => ({
-  adminAddForm: {
+  list: [],
+  listPageInfo: {
+    pageNumber: 1,
+    pageSize: 10,
+    totalItems: 0,
+    nameReg: ''
+  },
+  itemForm: {
     userName: '',
     password: '',
     passwordConfirmed: '',
@@ -14,11 +22,22 @@ const state = () => ({
   },
   loginRule: {
     userName: [
-      {validator: validateUserName, trigger: 'blur'}
+      {
+        required: true,
+        validator: validateUserName,
+        trigger: 'blur'}
     ],
     password: [
-      {validator: validatePassword, trigger: 'blur'}
+      {
+        required: true,
+        validator: validatePassword,
+        trigger: 'blur'
+      }
     ]
+  },
+  itemDialog: {
+    visable: false,
+    title: ''
   }
 })
 
@@ -44,11 +63,22 @@ var validatePassword = (rule, value, callback) => {
   }
 }
 
+// var validatePasswordConfirmed = (rule, value, callback) => {
+//   if (value === '') {
+//     callback(new Error('请输入确认密码'))
+//   } else {
+//     if (value !== this.state.itemForm.password) {
+//       callback(new Error('两次输入密码不一致!'))
+//     }
+//     callback()
+//   }
+// }
+//
 // var validateMobile = (rule, value, callback) => {
 //   if (value === '') {
 //     callback(new Error('请输入手机号'))
 //   } else {
-//     if (!validatorUtil.checkMobilePhoneNum(value)) {
+//     if (!validatorUtil.checkMobilePhone(value)) {
 //       callback(new Error('请输入正确的手机号'))
 //     }
 //     callback()
@@ -56,141 +86,85 @@ var validatePassword = (rule, value, callback) => {
 // }
 
 const mutations = {
-
-  // 'getUserList' (state, { userInfo }) {
-  //   state.userList = {
-  //     userInfo
-  //   }
-  // },
-  // 'recevieSessionState' (state, { userInfo, logined }) {
-  //   state.sessionState = {
-  //     userInfo, logined
-  //   }
-  // },
-  // 'getMobilrCode' (state, { formData }) {
-  //   state.mobileNo = Object.assign({
-  //     phoneNum: ''
-  //   }, formData)
-  // },
-  // 'recevieUserLoginForm' (state, { formData }) {
-  //   state.loginForm = Object.assign({
-  //     email: '',
-  //     password: ''
-  //   }, formData)
-  // },
-  // 'recevieUserRegForm' (state, { formData }) {
-  //   state.regForm = Object.assign({
-  //     userName: '',
-  //     email: '',
-  //     password: '',
-  //     confirmPassword: ''
-  //   }, formData)
-  // },
-  // 'recevieUserNotices' (state, noticelist) {
-  //   state.userNotices = noticelist
-  // },
-  // 'recevieUserReplies' (state, replylist) {
-  //   state.userReplies = replylist
-  // },
-  // 'recevieUserContents' (state, contentlist) {
-  //   state.userContents = contentlist
-  // },
-  // 'showContentForm' (state, formState) {
-  //   state.content.formState.edit = formState.edit
-  //   state.content.formState.formData = Object.assign({
-  //     title: '',
-  //     stitle: '',
-  //     type: '',
-  //     categories: [],
-  //     sortPath: '',
-  //     tags: [],
-  //     keywords: '',
-  //     sImg: '',
-  //     discription: '',
-  //     author: {},
-  //     state: true,
-  //     isTop: 0,
-  //     clickNum: 0,
-  //     comments: '',
-  //     markDownComments: '',
-  //     commentNum: 0,
-  //     likeNum: 0,
-  //     likeUserIds: '',
-  //     from: '3'
-  //   }, formState.formData)
-  // }
+  'receiveList' (state, {list, pageInfo}) {
+    state.list = list
+    state.listPageInfo = pageInfo
+    state.itemDialog.visable = false
+  }
 }
 
 const actions = {
-  // async getSmsCode ({commit}, value) {
-  //   const { data } = await api.post('users/getsmscode', { mobile: value })
-  //   if (data.state === 'success') {
-  //     commit('GETSmsCode', {
-  //       ...data
-  //     })
-  //   }
-  // },
-  async getSmsCode ({ commit }, value) {
-    const { data } = await api.post('users/getSmsCode', { mobile: value })
+  async 'getAll' ({commit, state}) {
+    const {data} = await api.get('admin/getAll', {...state.listPageInfo}, true)
+    if (data.list && data.state === 'success') {
+      commit('receiveList', {...data})
+    }
+  },
+  async 'setPageSize' ({commit, dispatch, state}, val) {
+    state.listPageInfo.pageSize = val
+    dispatch('getAll')
+  },
+  async 'setPageNumber' ({commit, dispatch, state}, val) {
+    state.listPageInfo.pageNumber = val
+    dispatch('getAll')
+  },
+  async 'addOne' ({commit, dispatch, state}) {
+    const {data} = await api.post('admin/addOne', {...state.itemForm}, true)
     if (data.state === 'success') {
-      commit('ReceiveSmsCode', {
-        ...data
+      Message({
+        message: '保存成功',
+        type: 'success'
+      })
+      dispatch('getAll')
+    } else {
+      Message({
+        message: data.message,
+        type: 'error'
       })
     }
   },
-  async doReg ({ commit }, value) {
-    const { data } = await api.post('users/doReg', { mobile: value })
+  async 'updateOne' ({commit, dispatch, state}) {
+    const {data} = await api.post('admin/updateOne', {...state.itemForm}, true)
     if (data.state === 'success') {
-      commit('ReceiveSmsCode', {
-        ...data
+      dispatch('getAll')
+      Message({
+        message: '更新成功',
+        type: 'success'
+      })
+    } else {
+      Message({
+        message: data.message,
+        type: 'error'
       })
     }
+  },
+  async 'deleteOne' ({commit, dispatch, state}) {
+    const {data} = await api.get('admin/deleteOne', {ids: state.itemForm._id}, true)
+    if (data.state === 'success') {
+      dispatch('getAll')
+      Message({
+        message: '删除成功',
+        type: 'success'
+      })
+    } else {
+      Message({
+        message: data.message,
+        type: 'error'
+      })
+    }
+  },
+  async 'setForm' ({commit, state}, index) {
+    if (index === -1) {
+      state.itemForm = {
+        userName: '',
+        password: '',
+        passwordConfirmed: '',
+        mobile: ''
+      }
+    } else {
+      state.itemForm = state.list[index]
+    }
   }
-  // async 'getSessionState' ({ commit, state }, config) {
-  //   const { data } = await api.get('users/session')
-  //   if (data.state === 'success') {
-  //     commit('recevieSessionState', {
-  //       ...config,
-  //       ...data
-  //     })
-  //   }
-  // },
-  // async 'getMobilrCode' ({commit}, params) {
-  //   commit('getMobilrCode', {
-  //     ...params
-  //   })
-  // },
-  // async 'regForm' ({commit}, params) {
-  //   commit('recevieUserRegForm', {
-  //     ...params
-  //   })
-  // },
-  // async 'userNotices' ({
-  //   commit
-  // }, params) {
-  //   const { data } = await api.get('users/getUserNotifys')
-  //   commit('recevieUserNotices', data)
-  // },
-  // async 'userReplies' ({
-  //   commit
-  // }, params) {
-  //   const { data } = await api.get('users/getUserReplies')
-  //   commit('recevieUserReplies', data)
-  // },
-  // async 'userContents' ({
-  //   commit
-  // }, params) {
-  //   const { data } = await api.get('users/getUserContents')
-  //   commit('recevieUserContents', data)
-  // },
-  // async 'contentForm' ({
-  //   commit
-  // }, params) {
-  //   commit('showContentForm', {
-  //     edit: params.edit,
-  //     formData: params.formData
-  //   })
-  // }
 }
 
 const getters = {
@@ -199,6 +173,21 @@ const getters = {
   },
   'loginRule' (state) {
     return state.loginRule
+  },
+  'list' (state) {
+    return state.list
+  },
+  'listPageInfo' (state) {
+    return state.listPageInfo
+  },
+  'itemForm' (state) {
+    return state.itemForm
+  },
+  'itemRule' (state) {
+    return state.itemRule
+  },
+  'itemDialog' (state) {
+    return state.itemDialog
   }
 }
 

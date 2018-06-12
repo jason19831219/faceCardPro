@@ -41,15 +41,15 @@ app.use(session(sessionConfig));
 
 app.use("/public", express.static("./public"));
 app.use("/www-admin", express.static("./www-admin/dist"));
-app.use("/face-test", express.static("./face-test/dist"));
-app.use(express.static("./web-www/dist"));
+// app.use("/face-test", express.static("./face-test/dist"));
+// app.use(express.static("./web-www/dist"));
 app.use("/api", api);
 app.use("/manage", manage);
 
-app.get("*", function(req, res) {
-    const html = fs.readFileSync(path.resolve(__dirname, settings.frontend_path+"/index.html"), "utf-8");
-    res.send(html);
-});
+// app.get("*", function(req, res) {
+//     const html = fs.readFileSync(path.resolve(__dirname, settings.frontend_path+"/index.html"), "utf-8");
+//     res.send(html);
+// });
 
 // app.all("*", function(req, res, next) {
 // 	res.header("Access-Control-Allow-Origin", req.headers.origin);
@@ -61,8 +61,8 @@ app.get("*", function(req, res) {
 // 	next();
 // });
 
-var privateKey  = fs.readFileSync("./utils/1527853852909.key");
-var certificate = fs.readFileSync("./utils/1527853852909.pem");
+var privateKey  = fs.readFileSync("./utils/1529871730876.key");
+var certificate = fs.readFileSync("./utils/1529871730876.pem");
 var credentials = {key: privateKey, cert: certificate};
 
 var httpServer = http.createServer(app);

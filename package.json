@@ -18,10 +18,14 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "formidable": "^1.2.1",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.2.2",
     "lodash": "^4.17.10",
+    "mime": "^2.3.1",
     "moment": "^2.22.2",
     "mongoose": "^5.1.4",
     "redis-connector": "0.0.0-deprecate",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "validator": "^10.3.0"
   }
 }

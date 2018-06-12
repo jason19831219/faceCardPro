@@ -1,5 +1,4 @@
 import axios from 'axios'
-import config from './config-client'
 
 axios.defaults.withCredentials = true
 axios.interceptors.request.use(config => {
@@ -45,25 +44,25 @@ function checkCode (res) {
 }
 
 export default {
-  post (url, data, manage) {
-    var urltemp = manage ? config.manage + url : config.api + url
+  post (url, data) {
+    var urltemp = '/manage/' + url
     return axios({
       method: 'post',
       url: urltemp,
       data: data,
-      timeout: config.timeout,
+      timeout: '30000',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       }
     }).then(checkStatus).then(checkCode)
   },
-  get (url, params = {}, manage) {
-    var urltemp = manage ? config.manage + url : config.api + url
+  get (url, params = {}) {
+    var urltemp = '/manage/' + url
     return axios({
       method: 'get',
       url: urltemp,
       params,
-      timeout: config.timeout,
+      timeout: '30000',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       }

@@ -28,7 +28,7 @@ export default {
     return str && validator.isEmail(str)
   },
   // 校验手机号
-  checkMobilePhoneNum (str) {
+  checkMobilePhone (str) {
     return str && validator.isLength(str, 11, 11) && validator.isMobilePhone(str.toString(), 'zh-CN')
   },
   checkSmsCode (str) {
