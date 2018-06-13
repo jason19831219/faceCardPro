@@ -14,6 +14,7 @@ const {
 	Moji,
 	Admin,
 	Article,
+	Star,
 	MojiSet
 } = require("../controller");
 const {
@@ -41,6 +42,11 @@ router.get("/admin/deleteOne",authAdmin, Admin.deleteOne);
 router.post("/admin/login", Admin.login);
 router.post("/admin/logOut",authAdmin, Admin.logOut);
 
+
+router.get("/star/getAll", authAdmin, Star.getAll);
+router.post("/star/addOne",authAdmin, Star.addOne);
+router.post("/star/updateOne",authAdmin, Star.updateOne);
+router.get("/star/deleteOne",authAdmin, Star.deleteOne);
 
 router.get("/article/getAll", authAdmin, Article.getAll);
 router.post("/article/addOne",authAdmin, Article.addOne);

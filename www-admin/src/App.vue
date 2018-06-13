@@ -42,4 +42,9 @@ export default {
   .el-main{
     text-align: left;
   }
+  * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
 </style>

@@ -72,9 +72,12 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="itemDialog.visable = false">取 消</el-button>
-        <el-button v-if="itemDialog.title == '添加'" type="primary" @click="addOne()">{{itemDialog.title}}</el-button>
-        <el-button v-if="itemDialog.title == '修改'" type="primary" @click="updateOne()">{{itemDialog.title}}</el-button>
-        <el-button v-if="itemDialog.title == '删除'" type="primary" @click="deleteOne()">{{itemDialog.title}}</el-button>
+        <el-button v-if="itemDialog.title == '添加'" type="primary" @click="addOne('itemForm')">{{itemDialog.title}}
+        </el-button>
+        <el-button v-if="itemDialog.title == '修改'" type="primary" @click="updateOne('itemForm')">{{itemDialog.title}}
+        </el-button>
+        <el-button v-if="itemDialog.title == '删除'" type="primary" @click="deleteOne('itemForm')">{{itemDialog.title}}
+        </el-button>
       </div>
     </el-dialog>
 
@@ -109,14 +112,35 @@ export default {
       this.itemDialog.title = '删除'
       this.$store.dispatch('admin/setForm', index)
     },
-    addOne () {
-      this.$store.dispatch('admin/addOne')
+    addOne (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('admin/addOne', formName)
+        } else {
+          this.$message.error('error submit!!')
+          return false
+        }
+      })
     },
-    updateOne () {
-      this.$store.dispatch('admin/updateOne')
+    updateOne (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('admin/updateOne')
+        } else {
+          this.$message.error('error submit!!')
+          return false
+        }
+      })
     },
-    deleteOne () {
-      this.$store.dispatch('admin/deleteOne')
+    deleteOne (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('admin/deleteOne')
+        } else {
+          this.$message.error('error submit!!')
+          return false
+        }
+      })
     },
     handleSizeChange (val) {
       this.$store.dispatch('admin/setPageSize', val)
@@ -166,7 +190,8 @@ export default {
                 callback()
               }
             },
-            trigger: 'blur'}
+            trigger: 'blur'
+          }
         ],
         passwordConfirmed: [
           {
