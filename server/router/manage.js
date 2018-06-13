@@ -11,11 +11,8 @@ const base64Img = require("base64-img");
 
 // 新建一个对象，建议只保存一个对象调用服务接口
 const {
-	Moji,
 	Admin,
-	Article,
 	Star,
-	MojiSet
 } = require("../controller");
 const {
 	service,
@@ -48,17 +45,17 @@ router.post("/star/addOne",authAdmin, Star.addOne);
 router.post("/star/updateOne",authAdmin, Star.updateOne);
 router.get("/star/deleteOne",authAdmin, Star.deleteOne);
 
-router.get("/article/getAll", authAdmin, Article.getAll);
-router.post("/article/addOne",authAdmin, Article.addOne);
-router.post("/article/updateOne",authAdmin, Article.updateOne);
-router.get("/article/deleteOne",authAdmin, Article.deleteOne);
-
-router.post("/moji/addOne",authAdmin, Moji.addOne);
-router.get("/moji/getAll",authAdmin, Moji.getAll);
-
-router.post("/mojiSet/addOne",authAdmin, MojiSet.addOne);
-router.post("/mojiSet/updateMojiItem",authAdmin, MojiSet.updateMojiItem);
-router.get("/mojiSet/getList",authAdmin, MojiSet.getList);
+// router.get("/article/getAll", authAdmin, Article.getAll);
+// router.post("/article/addOne",authAdmin, Article.addOne);
+// router.post("/article/updateOne",authAdmin, Article.updateOne);
+// router.get("/article/deleteOne",authAdmin, Article.deleteOne);
+//
+// router.post("/moji/addOne",authAdmin, Moji.addOne);
+// router.get("/moji/getAll",authAdmin, Moji.getAll);
+//
+// router.post("/mojiSet/addOne",authAdmin, MojiSet.addOne);
+// router.post("/mojiSet/updateMojiItem",authAdmin, MojiSet.updateMojiItem);
+// router.get("/mojiSet/getList",authAdmin, MojiSet.getList);
 
 
 function base64_encode(file) {
