@@ -7,7 +7,7 @@ const router = express.Router();
 // const cache = new NodeCache({stdTTL: 3600, checkperiod: 3600});
 const _ = require("lodash");
 
-const { User, Article } = require("../controller");
+const { User } = require("../controller");
 const { settings } = require("../../utils");
 // Article.getArticlesBG();
 
@@ -210,7 +210,5 @@ router.get("/users/getSmsCode",User.getSmsCode);
 router.post("/users/mobileCheck",User.mobileCheck);
 router.post("/users/getAuth",User.getAuth);
 
-
-router.get("/article/getAll", Article.getAll);
 
 module.exports = router;
