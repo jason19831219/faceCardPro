@@ -104,28 +104,33 @@ class Star {
     }
 
     async updateOne(req, res, next) {
-
         try {
             var fields = req.body;
-            let errMsg = '';
-            if (!service.checkFormData(fields)) {
-                errMsg = '非法请求，请重试！';
-            }
-            if (errMsg) {
+            var errmsg = service.checkFormData(fields);
+            if (errmsg != '') {
                 res.send({
                     state: 'error',
-                    message: errMsg
+                    message: errmsg
                 })
-                return;
+                return
             }
 
             const starObj = {
-                title: fields.title,
-                author: fields.author,
-                authorAvatarSrc: fields.authorAvatarSrc,
-                imgSrc: fields.imgSrc,
-                fromSite: fields.fromSite,
-                sticky: fields.sticky
+                name: fields.name,
+                src: fields.src,
+                age: fields.age,
+                angle: fields.angle,
+                beauty: fields.beauty,
+                expression: fields.expression,
+                face_probability: fields.face_probability,
+                face_shape: fields.face_shape,
+                face_token: fields.face_token,
+                gender: fields.gender,
+                glasses: fields.glasses,
+                landmark: fields.landmark,
+                landmark72: fields.landmark72,
+                location: fields.location,
+                race: fields.race
             }
             await StarModel.findOneAndUpdate({ _id: fields._id }, { $set: starObj });
             res.send({

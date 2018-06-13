@@ -65,7 +65,6 @@ function base64_encode(file) {
 
 router.post("/startAipFace", function (req, res, next) {
 	var fields = req.body;
-	console.log(fields.path);
 	var client = new AipFaceClient(APP_ID, API_KEY, SECRET_KEY);
 	var image = base64_encode(fields.path);
 
@@ -77,7 +76,6 @@ router.post("/startAipFace", function (req, res, next) {
 	// 带参数调用人脸检测
 	client.detect(image, imageType, options).then(function(result) {
 		if(!result.error_code){
-			console.log(result.result.face_list);
 			res.send(
 				{
 					state: "success",
