@@ -153,7 +153,6 @@ let systemService = {
 
     checkFormData: function (fields) {
         let errMsg = '';
-        console.log(fields.imgSrc+'sf');
         if (fields.userName && !validatorUtil.checkUserName(fields.userName)) {
             errMsg = '5-12个英文字符!';
         }
