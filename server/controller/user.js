@@ -3,7 +3,7 @@ const UserModel = require("../models").User;
 const {service, settings} = require('../../utils');
 const _ = require('lodash');
 const SMSClient = require('@alicloud/sms-sdk');
-
+const request = require('request');
 const redis = require('redis');
 const redisClient = redis.createClient(settings.redis_port, settings.redis_host, {auth_pass: settings.redis_psd});
 redisClient.select("15", function (err) {
@@ -357,7 +357,32 @@ class User {
     }
 
     async wxLogin(req, res, next) {
+
         console.log(req)
+        let code = req.query.code
+        request.get({
+            uri: 'https://api.weixin.qq.com/sns/jscode2session',
+            json: true,
+            qs: {
+                grant_type: 'authorization_code',
+                appid: settings.wx_appID,
+                secret: settings.wx_appSecret,
+                js_code: code
+            }
+        }, (err, response, data) => {
+            if (response.statusCode === 200) {
+                console.log("[openid]", data.openid)
+                console.log("[session_key]", data.session_key)
+
+                //TODO: 生成一个唯一字符串sessionid作为键，将openid和session_key作为值，存入redis，超时时间设置为2小时
+                //伪代码: redisStore.set(sessionid, openid + session_key, 7200)
+
+                res.json({ sessionid: 'aaa' })
+            } else {
+                console.log("[error]", err)
+                res.json(err)
+            }
+        })
     }
 
 }
