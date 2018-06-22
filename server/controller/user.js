@@ -1,9 +1,10 @@
 const UserModel = require("../models").User;
 // const formidable = require('formidable');
-const {service, settings} = require('../../utils');
+const {service, settings, wxbzc} = require('../../utils');
 const _ = require('lodash');
 const SMSClient = require('@alicloud/sms-sdk');
 const request = require('request');
+const sha1 = require("sha1");
 const redis = require('redis');
 const redisClient = redis.createClient(settings.redis_port, settings.redis_host, {auth_pass: settings.redis_psd});
 redisClient.select("15", function (err) {
@@ -357,9 +358,11 @@ class User {
     }
 
     async wxLogin(req, res, next) {
-
-        console.log(req)
-        let code = req.query.code
+        // let { encryptedData, iv, js_code, rawData, signature } = req.body;
+        console.log(req.headers)
+        let code = req.headers[settings.WX_HEADER_CODE]
+        let encryptedData = req.headers[settings.WX_HEADER_ENCRYPTED_DATA]
+        let iv = req.headers[settings.WX_HEADER_IV]
         request.get({
             uri: 'https://api.weixin.qq.com/sns/jscode2session',
             json: true,
@@ -371,8 +374,16 @@ class User {
             }
         }, (err, response, data) => {
             if (response.statusCode === 200) {
+                console.log(data)
                 console.log("[openid]", data.openid)
                 console.log("[session_key]", data.session_key)
+
+                let session_key = data.session_key
+                let appId = settings.wx_appID
+                // let signature2 = sha1(rawData + session_key);
+
+                let pc = new wxbzc(appId, session_key);
+                let data = pc.decryptData(encryptedData, iv)
 
                 //TODO: 生成一个唯一字符串sessionid作为键，将openid和session_key作为值，存入redis，超时时间设置为2小时
                 //伪代码: redisStore.set(sessionid, openid + session_key, 7200)
