@@ -7,7 +7,9 @@ const fs = require("fs");
 const path = require("path");
 
 // 新建一个对象，建议只保存一个对象调用服务接口
-const {} = require("../controller");
+const {
+    User
+} = require("../controller");
 const {
     service,
     settings
@@ -52,5 +54,6 @@ router.post("/uploads", (req, res, next) => {
     }
 });
 
+router.post("/login", User.wxLogin);
 
 module.exports = router;
