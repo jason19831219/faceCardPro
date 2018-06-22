@@ -54,6 +54,6 @@ router.post("/uploads", (req, res, next) => {
     }
 });
 
-router.post("/login", User.wxLogin);
+router.get("/login", User.wxLogin);
 
 module.exports = router;
