@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/view/Home'
+import User from '@/view/User'
 import Admin from '@/view/Admin'
 import Star from '@/view/Star'
 Vue.use(Router)
@@ -11,6 +12,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/user',
+      name: 'User',
+      component: User
     },
     {
       path: '/admin',

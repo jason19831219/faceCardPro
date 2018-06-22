@@ -13,7 +13,7 @@ const settings = require("./utils/settings");
 
 const api = require("./server/router/api");
 const manage = require("./server/router/manage");
-
+const wep = require("./server/router/wep");
 var app = express();
 app.set("view engine", "ejs");
 
@@ -45,7 +45,7 @@ app.use("/www-admin", express.static("./www-admin/dist"));
 // app.use(express.static("./web-www/dist"));
 app.use("/api", api);
 app.use("/manage", manage);
-
+app.use("/wep", wep);
 // app.get("*", function(req, res) {
 //     const html = fs.readFileSync(path.resolve(__dirname, settings.frontend_path+"/index.html"), "utf-8");
 //     res.send(html);

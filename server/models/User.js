@@ -10,10 +10,6 @@ var UserSchema = new Schema({
 		type: String,
 		"default": shortid.generate
 	},
-	enable: {
-		type: Boolean,
-		default: true
-	},
 	userName: {
 		type: String,
 		unique: true,
@@ -21,8 +17,7 @@ var UserSchema = new Schema({
 	},
 	mobile: {
 		type: Number,
-		unique: true,
-		required: true
+		unique: true
 	},
 	nickName: {
 		type: String
@@ -31,12 +26,7 @@ var UserSchema = new Schema({
 		type: String
 	},
 	password: {
-		type: String,
-		required: true
-	},
-	comments: {
-		type: String,
-		default: "这个人很懒，什么都没有留下..."
+		type: String
 	},
 	createDate: {
 		type: Date,
@@ -46,29 +36,33 @@ var UserSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-	actionPoint: {
-	    type: Number,
-		default: 20
-	},
 	avatar: {
 	    type: String,
 		default: "/upload/images/defaultlogo.png"
 	},
-	group: {
-	    type: Number,
-		default: 0
-	},
-	adminFlag: {
-	    type: Boolean,
-		default: false
-	},
 	gender: {
-		type: String,
-		default: "secret",
-		required: true
+		type: String
 	},
-	openid: String,
-	qq: Number
+    openId: {
+        type: String,
+        unique: true
+    },
+    unionId: {
+        type: String,
+        unique: true
+    },
+    city: {
+        type: String
+    },
+    province: {
+        type: String
+    },
+    country: {
+        type: String
+    },
+    avatarUrl: {
+        type: String
+    },
 
 });
 

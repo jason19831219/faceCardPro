@@ -60,7 +60,7 @@ router.get("/star/deleteOne",authAdmin, Star.deleteOne);
 
 function base64_encode(file) {
 	var bitmap = fs.readFileSync(path.join(__dirname,"../../",file));
-	return new Buffer(bitmap).toString("base64");
+	return  Buffer.from(bitmap).toString("base64");
 }
 
 router.post("/startAipFace", function (req, res, next) {
@@ -131,10 +131,9 @@ router.post("/uploadsImageBase64", (req, res, next) => {
 
 router.post("/uploads", (req, res, next) => {
 
-	//    获取传入参数
 	let params = url.parse(req.url, true);
-	console.log(params);
 	let fileType = params.query.type;
+	console.log(params)
 
 
 	let form = new formidable.IncomingForm();
@@ -146,21 +145,22 @@ router.post("/uploads", (req, res, next) => {
 	try{
 		form.parse(req)
 			.on("file", function (name, file) {
-				console.log(file);
 				let realFileType = service.getFileMimeType(file.path);
 				let typeKey = "others";
 				let thisType = file.name.split(".")[file.name.split(".").length-1];
+                console.log(thisType)
 				let ms = moment(new Date()).format("YYYYMMDDHHmmss").toString();
 				if (fileType == "images") {
 					typeKey = "img";
 				}
 				newFileName = typeKey + ms + "." + thisType;
 
+
+
 				if (fileType == "images") {
 					if (realFileType.fileType == "jpg" || realFileType.fileType == "jpeg" || realFileType.fileType == "png" || realFileType.fileType == "gif") {
 						fs.rename(file.path, uploadPath + newFileName, function () {
 							var imageBuf = fs.readFileSync(path.join(__dirname, "../../"+uploadPath + newFileName));
-							console.log("/"+uploadPath + newFileName+'sdfsdfsdfds')
 							res.send(
 								{
 									state: "success",
@@ -190,10 +190,6 @@ router.post("/uploads", (req, res, next) => {
 			massage: e.toString()
 		});
 	}
-
-
-
-
 });
 
 

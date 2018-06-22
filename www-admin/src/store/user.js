@@ -1,6 +1,7 @@
 import api from '@/api'
 import { Message } from 'element-ui'
-// import validatorUtil from '@/utils/validation'
+import validatorUtil from '@/utils/validation'
+
 const state = () => ({
   list: [],
   listPageInfo: {
@@ -10,70 +11,72 @@ const state = () => ({
     nameReg: ''
   },
   itemForm: {
-    name: '',
-    desc: '',
-    author: '',
-    authorAvatarSrc: '',
-    imgSrc: [[]],
-    fromSite: ''
+    userName: '',
+    password: '',
+    passwordConfirmed: '',
+    mobile: ''
   },
-  itemFormRule: {
-    title: [
-      {
-        required: true,
-        validator: (rule, value, callback) => {
-          if (value === '') {
-            callback(new Error('名字'))
-          }
-          callback()
-        },
-        trigger: 'blur'
-      }
-    ],
-    imgSrc: [
-      {
-        required: true,
-        trigger: 'blur'
-      }
-    ],
-    author: [
-      {
-        trigger: 'blur'
-      }
-    ],
-    desc: [
-      {
-        trigger: 'blur'
-      }
-    ]
+  itemDialog: {
+    visable: false,
+    title: ''
   }
 })
+
+var validateUserName = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入用户名'))
+  } else {
+    if (!validatorUtil.checkUserName(value)) {
+      callback(new Error('5-12个英文字符!'))
+    }
+    callback()
+  }
+}
+
+var validatePassword = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入密码'))
+  } else {
+    if (!validatorUtil.checkPwd(value)) {
+      callback(new Error('6-12位，只能包含字母、数字和下划线!'))
+    }
+    callback()
+  }
+}
+
+// var validatePasswordConfirmed = (rule, value, callback) => {
+//   if (value === '') {
+//     callback(new Error('请输入确认密码'))
+//   } else {
+//     if (value !== this.state.itemForm.password) {
+//       callback(new Error('两次输入密码不一致!'))
+//     }
+//     callback()
+//   }
+// }
+//
+// var validateMobile = (rule, value, callback) => {
+//   if (value === '') {
+//     callback(new Error('请输入手机号'))
+//   } else {
+//     if (!validatorUtil.checkMobilePhone(value)) {
+//       callback(new Error('请输入正确的手机号'))
+//     }
+//     callback()
+//   }
+// }
 
 const mutations = {
   'receiveList' (state, {list, pageInfo}) {
     state.list = list
-    state.list.forEach(function (value) {
-      value.imgSrc.forEach(function (value, index, array) {
-        array[index] = [(value[0].split(' '))[0]]
-      })
-    })
-    console.log(state.list)
     state.listPageInfo = pageInfo
-  },
-  'HandleAvatarSuccess' (state, {path}) {
-    state.itemForm.authorAvatarSrc = path
-  },
-  'HandleImageSuccess' (state, {index, path}) {
-    if (!state.itemForm.imgSrc[index][0]) {
-      state.itemForm.imgSrc.push([''])
-    }
-    state.itemForm.imgSrc.splice(index, 1, [path])
+    state.itemDialog.visable = false
   }
 }
 
 const actions = {
   async 'getAll' ({commit, state}) {
-    const {data} = await api.get('article/getAll', {...state.listPageInfo}, true)
+    const {data} = await api.get('admin/getAll', {...state.listPageInfo}, true)
     if (data.list && data.state === 'success') {
       commit('receiveList', {...data})
     }
@@ -87,8 +90,7 @@ const actions = {
     dispatch('getAll')
   },
   async 'addOne' ({commit, dispatch, state}) {
-    state.itemForm.imgSrc.pop()
-    const {data} = await api.post('article/addOne', {...state.itemForm}, true)
+    const {data} = await api.post('admin/addOne', {...state.itemForm}, true)
     if (data.state === 'success') {
       Message({
         message: '保存成功',
@@ -103,12 +105,7 @@ const actions = {
     }
   },
   async 'updateOne' ({commit, dispatch, state}) {
-    state.itemForm.imgSrc.forEach(function (value, index) {
-      if (!value[0]) {
-        state.itemForm.imgSrc.splice(index, 1)
-      }
-    })
-    const {data} = await api.post('article/updateOne', {...state.itemForm}, true)
+    const {data} = await api.post('admin/updateOne', {...state.itemForm}, true)
     if (data.state === 'success') {
       dispatch('getAll')
       Message({
@@ -123,7 +120,7 @@ const actions = {
     }
   },
   async 'deleteOne' ({commit, dispatch, state}) {
-    const {data} = await api.get('article/deleteOne', {ids: state.itemForm.id}, true)
+    const {data} = await api.get('admin/deleteOne', {ids: state.itemForm._id}, true)
     if (data.state === 'success') {
       dispatch('getAll')
       Message({
@@ -140,27 +137,24 @@ const actions = {
   async 'setForm' ({commit, state}, index) {
     if (index === -1) {
       state.itemForm = {
-        title: '',
-        desc: '',
-        author: '',
-        authorAvatarSrc: '',
-        imgSrc: [],
-        fromSite: ''
+        userName: '',
+        password: '',
+        passwordConfirmed: '',
+        mobile: ''
       }
     } else {
       state.itemForm = state.list[index]
     }
-    state.itemForm.imgSrc.push([])
-  },
-  async 'handleImageSuccess' ({commit, state}, data) {
-    commit('HandleImageSuccess', {...data})
-  },
-  async 'handleAvatarSuccess' ({commit, state}, data) {
-    commit('HandleAvatarSuccess', {...data})
   }
 }
 
 const getters = {
+  'loginForm' (state) {
+    return state.loginForm
+  },
+  'loginRule' (state) {
+    return state.loginRule
+  },
   'list' (state) {
     return state.list
   },
@@ -170,8 +164,11 @@ const getters = {
   'itemForm' (state) {
     return state.itemForm
   },
-  'itemFormRule' (state) {
-    return state.itemFormRule
+  'itemRule' (state) {
+    return state.itemRule
+  },
+  'itemDialog' (state) {
+    return state.itemDialog
   }
 }
 

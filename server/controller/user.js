@@ -356,6 +356,10 @@ class User {
         })
     }
 
+    async wxLogin(req, res, next) {
+        console.log(req)
+    }
+
 }
 
 module.exports = new User();
