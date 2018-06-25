@@ -374,7 +374,6 @@ class User {
             }
         }, (err, response, data) => {
             if (response.statusCode === 200) {
-                console.log(data)
                 console.log("[openid]", data.openid)
                 console.log("[session_key]", data.session_key)
 
@@ -383,7 +382,9 @@ class User {
                 // let signature2 = sha1(rawData + session_key);
 
                 let pc = new wxbzc(appId, session_key);
-                let data = pc.decryptData(encryptedData, iv)
+                let re = pc.decryptData(encryptedData, iv)
+
+                console.log(re)
 
                 //TODO: 生成一个唯一字符串sessionid作为键，将openid和session_key作为值，存入redis，超时时间设置为2小时
                 //伪代码: redisStore.set(sessionid, openid + session_key, 7200)
