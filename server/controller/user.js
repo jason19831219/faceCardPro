@@ -1,6 +1,6 @@
 const UserModel = require("../models").User;
 // const formidable = require('formidable');
-const {service, settings, wxbzc} = require('../../utils');
+const {service, settings, WXBizDataCrypt} = require('../../utils');
 const _ = require('lodash');
 const SMSClient = require('@alicloud/sms-sdk');
 const request = require('request');
@@ -358,8 +358,6 @@ class User {
     }
 
     async wxLogin(req, res, next) {
-        // let { encryptedData, iv, js_code, rawData, signature } = req.body;
-        console.log(req.headers)
         let code = req.headers[settings.WX_HEADER_CODE]
         let encryptedData = req.headers[settings.WX_HEADER_ENCRYPTED_DATA]
         let iv = req.headers[settings.WX_HEADER_IV]
@@ -374,22 +372,34 @@ class User {
             }
         }, (err, response, data) => {
             if (response.statusCode === 200) {
-                console.log("[openid]", data.openid)
-                console.log("[session_key]", data.session_key)
 
-                let session_key = data.session_key
+                let session_key = sha1(data.session_key)
                 let appId = settings.wx_appID
-                // let signature2 = sha1(rawData + session_key);
+                let wxvdc = new WXBizDataCrypt(appId, data.session_key);
+                console.log(wxvdc)
+                let wxvdcdata = wxvdc.decryptData(encryptedData, iv);
 
-                let pc = new wxbzc(appId, session_key);
-                let re = pc.decryptData(encryptedData, iv)
+                console.log(session_key)
+                console.log(wxvdcdata)
 
-                console.log(re)
+                req.session.session_key = session_key;
+                req.session.openid = data.openid;
+                req.session.nickName = wxvdcdata.nickName;
+                req.session.gender = wxvdcdata.gender;
+                req.session.language = wxvdcdata.language;
+                req.session.city = wxvdcdata.city;
+                req.session.province = wxvdcdata.province;
+                req.session.country = wxvdcdata.country;
+                req.session.avatarUrl = wxvdcdata.avatarUrl;
+                req.session.watermark = wxvdcdata.watermark;
 
-                //TODO: 生成一个唯一字符串sessionid作为键，将openid和session_key作为值，存入redis，超时时间设置为2小时
-                //伪代码: redisStore.set(sessionid, openid + session_key, 7200)
-
-                res.json({ sessionid: 'aaa' })
+                res.send({
+                    code: 0,
+                    data: {
+                        skey: session_key,
+                        userinfo: wxvdcdata
+                    }
+                })
             } else {
                 console.log("[error]", err)
                 res.json(err)

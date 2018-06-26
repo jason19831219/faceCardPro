@@ -12,7 +12,8 @@ const {
 } = require("../controller");
 const {
     service,
-    settings
+    settings,
+    wxAuth
 } = require("../../utils");
 
 
@@ -54,6 +55,6 @@ router.post("/uploads", (req, res, next) => {
     }
 });
 
-router.get("/login", User.wxLogin);
+router.get("/login",wxAuth.authorizationMiddleware, User.wxLogin);
 
 module.exports = router;
