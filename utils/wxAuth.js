@@ -1,4 +1,4 @@
-const http = require('axios')
+const request = require('request')
 const moment = require('moment')
 const sha1 = require('./wx/sha1')
 const aesDecrypt = require('./wx/aesDecrypt')
@@ -113,26 +113,23 @@ function validationMiddleware (req, res, next) {
 
 function getSessionKey (code) {
 
-        const appid = settings.wx_appID
-        const appsecret = settings.wx_appSecret
+    request.get({
+        uri: 'https://api.weixin.qq.com/sns/jscode2session',
+        json: true,
+        qs: {
+            grant_type: 'authorization_code',
+            appid: settings.wx_appID,
+            secret: settings.wx_appSecret,
+            js_code: code
+        }
+    }, (err, response, data) => {
+        if (response.statusCode === 200) {
 
-        return http({
-            url: 'https://api.weixin.qq.com/sns/jscode2session',
-            method: 'GET',
-            params: {
-                appid: appid,
-                secret: appsecret,
-                js_code: code,
-                grant_type: 'authorization_code'
-            }
-        }).then(res => {
-            res = res.data
-            if (res.errcode || !res.openid || !res.session_key) {
-                throw new Error(`${ERRORS.ERR_GET_SESSION_KEY}\n${JSON.stringify(res)}`)
-            } else {
-                return res
-            }
-        })
+            return response
+        } else {
+            throw new Error(`${ERRORS.ERR_GET_SESSION_KEY}\n${JSON.stringify(res)}`)
+        }
+    })
 
 }
 
