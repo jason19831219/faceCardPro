@@ -18,7 +18,7 @@ const {
 
 
 router.post("/uploads", (req, res, next) => {
-    console.log(req.session);
+    console.log(req.sessionID);
 
     let form = new formidable.IncomingForm();
     let uploadPath = settings.wep_image_upload_path;

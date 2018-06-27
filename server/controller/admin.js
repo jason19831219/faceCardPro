@@ -8,6 +8,7 @@ class Admin {
     }
 
     async login(req, res, next) {
+        console.log(req.sessionID)
         var fields = req.body
         var errmsg = service.checkFormData(fields);
         if (errmsg != '') {

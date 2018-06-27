@@ -20,21 +20,21 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true }));
 app.use(cookieParser(settings.encrypt_key));
+
 let sessionConfig = {
-    name: settings.admin_auth_cookie_name,
+    name: 'skey',
     secret: settings.encrypt_key,
     cookie: {
-        secure: false,
         maxAge: 60 * 60 * 1000,
     },
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
 
     store: new RedisStore({
         port: settings.redis_port,
         host: settings.redis_host,
         pass: settings.redis_psd,
-        ttl: settings.redis_ttl // 过期时间
+        ttl: 1800 // 过期时间
     })
 };
 app.use(session(sessionConfig));
