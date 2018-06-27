@@ -51,19 +51,9 @@ var UserSchema = new Schema({
         type: String,
         unique: true
     },
-    city: {
-        type: String
-    },
-    province: {
-        type: String
-    },
-    country: {
-        type: String
-    },
-    avatarUrl: {
-        type: String
-    },
-
+	wxUserInfo: {
+		type: {}
+	}
 });
 
 UserSchema.set("toJSON", {getters: true, virtuals: true});

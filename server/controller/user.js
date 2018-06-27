@@ -144,7 +144,7 @@ class User {
             var mobile = req.query.mobile;
             var mobileExt = mobile + "_smslogin";
             var isExist = false;
-            redisClient.exists(mobileExt,async (err,isExist) =>{
+            redisClient.exists(mobileExt, async (err, isExist) => {
                 if (isExist) {
                     res.send({
                         state: 'error',
@@ -192,7 +192,7 @@ class User {
             var mobileExt = req.body.mobile + '_smslogin';
             var smsCode = req.body.smsCode;
 
-            redisClient.exists(mobileExt, async (err,isExist) =>{
+            redisClient.exists(mobileExt, async (err, isExist) => {
                 if (isExist) {
                     redisClient.get(mobileExt, async (err, reply) => {
                         if (reply === smsCode) {
@@ -200,7 +200,7 @@ class User {
                                 mobile: mobile,
                             }
                             try {
-                                UserModel.findOne({'mobile': mobile},async (err, user) => {
+                                UserModel.findOne({'mobile': mobile}, async (err, user) => {
                                     if (!_.isEmpty(user)) {
                                         console.log(user)
                                         userObj.userId = user.userId
@@ -229,7 +229,7 @@ class User {
                                     }
                                 })
 
-                            }catch (e) {
+                            } catch (e) {
                                 console.log(e)
                             }
 
@@ -257,7 +257,7 @@ class User {
             mobile: mobile
         };
         let errmsg = service.checkFormData(fields)
-        if (errmsg){
+        if (errmsg) {
             res.send({
                 state: 'error',
                 message: errmsg
@@ -276,7 +276,7 @@ class User {
                     message: "用户不存在"
                 });
             }
-        }catch (e) {
+        } catch (e) {
             res.send({
                 state: 'error',
                 message: e
@@ -349,6 +349,9 @@ class User {
 //   })
 // }
 
+
+
+
     async logOut(req, res, next) {
         req.session.destroy();
         res.clearCookie(settings.auth_cookie_name, {path: '/'});
@@ -358,53 +361,94 @@ class User {
     }
 
     async wxLogin(req, res, next) {
-        let code = req.headers[settings.WX_HEADER_CODE]
-        let encryptedData = req.headers[settings.WX_HEADER_ENCRYPTED_DATA]
-        let iv = req.headers[settings.WX_HEADER_IV]
-        request.get({
-            uri: 'https://api.weixin.qq.com/sns/jscode2session',
-            json: true,
-            qs: {
-                grant_type: 'authorization_code',
-                appid: settings.wx_appID,
-                secret: settings.wx_appSecret,
-                js_code: code
-            }
-        }, (err, response, data) => {
-            if (response.statusCode === 200) {
 
-                let session_key = sha1(data.session_key)
-                let appId = settings.wx_appID
-                let wxvdc = new WXBizDataCrypt(appId, data.session_key);
-                console.log(wxvdc)
-                let wxvdcdata = wxvdc.decryptData(encryptedData, iv);
 
-                console.log(session_key)
-                console.log(wxvdcdata)
 
-                req.session.session_key = session_key;
-                req.session.openid = data.openid;
-                req.session.nickName = wxvdcdata.nickName;
-                req.session.gender = wxvdcdata.gender;
-                req.session.language = wxvdcdata.language;
-                req.session.city = wxvdcdata.city;
-                req.session.province = wxvdcdata.province;
-                req.session.country = wxvdcdata.country;
-                req.session.avatarUrl = wxvdcdata.avatarUrl;
-                req.session.watermark = wxvdcdata.watermark;
+        if (req.session.skey) {
 
-                res.send({
-                    code: 0,
-                    data: {
-                        skey: session_key,
-                        userinfo: wxvdcdata
-                    }
-                })
-            } else {
-                console.log("[error]", err)
-                res.json(err)
-            }
-        })
+            // const userObj = {
+            //     title: fields.title,
+            //     author: [fields.author],
+            //     authorAvatarSrc: fields.authorAvatarSrc,
+            //     imgSrc: fields.imgSrc,
+            //     fromSite: fields.fromSite,
+            //     sticky: fields.sticky
+            // }
+            //
+            // try {
+            //     let article = await ArticleModel.find({title: fields.title})
+            //     if (!_.isEmpty(article)) {
+            //         res.send({
+            //             state: 'error',
+            //             message: '名字已存在！'
+            //         });
+            //     } else {
+            //         const newArticle = new ArticleModel(articleObj);
+            //         await newArticle.save();
+            //         res.send({
+            //             state: 'success',
+            //             id: '图片已保存'
+            //         });
+            //     }
+            // } catch (err) {
+            //     res.send({
+            //         state: 'error',
+            //         message: '保存数据失败:',
+            //     })
+            // }
+            //
+            // req.session.userInfo
+            res.send({
+                code: 0,
+                data: {
+                    skey: req.session.skey,
+                    userinfo: req.session.userInfo
+                }
+            })
+        }
+        // let code = req.headers[settings.WX_HEADER_CODE]
+        // let encryptedData = req.headers[settings.WX_HEADER_ENCRYPTED_DATA]
+        // let iv = req.headers[settings.WX_HEADER_IV]
+        // request.get({
+        //     uri: 'https://api.weixin.qq.com/sns/jscode2session',
+        //     json: true,
+        //     qs: {
+        //         grant_type: 'authorization_code',
+        //         appid: settings.wx_appID,
+        //         secret: settings.wx_appSecret,
+        //         js_code: code
+        //     }
+        // }, (err, response, data) => {
+        //     if (response.statusCode === 200) {
+        //
+        //         let session_key = sha1(data.session_key)
+        //         let appId = settings.wx_appID
+        //         let wxvdc = new WXBizDataCrypt(appId, data.session_key);
+        //         let wxvdcdata = wxvdc.decryptData(encryptedData, iv);
+        //
+        //         req.session.session_key = session_key;
+        //         req.session.openid = data.openid;
+        //         req.session.nickName = wxvdcdata.nickName;
+        //         req.session.gender = wxvdcdata.gender;
+        //         req.session.language = wxvdcdata.language;
+        //         req.session.city = wxvdcdata.city;
+        //         req.session.province = wxvdcdata.province;
+        //         req.session.country = wxvdcdata.country;
+        //         req.session.avatarUrl = wxvdcdata.avatarUrl;
+        //         req.session.watermark = wxvdcdata.watermark;
+        //
+        //         res.send({
+        //             code: 0,
+        //             data: {
+        //                 skey: session_key,
+        //                 userinfo: wxvdcdata
+        //             }
+        //         })
+        //     } else {
+        //         console.log("[error]", err)
+        //         res.json(err)
+        //     }
+        // })
     }
 
 }

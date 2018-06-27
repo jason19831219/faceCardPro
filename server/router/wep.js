@@ -18,6 +18,7 @@ const {
 
 
 router.post("/uploads", (req, res, next) => {
+    console.log(req.session);
 
     let form = new formidable.IncomingForm();
     let uploadPath = settings.wep_image_upload_path;
@@ -43,9 +44,7 @@ router.post("/uploads", (req, res, next) => {
                                     }
                             });
                     });
-
                 }
-
             })
     } catch (e) {
         res.send({

@@ -2,74 +2,56 @@ const request = require('request')
 const moment = require('moment')
 const sha1 = require('./wx/sha1')
 const aesDecrypt = require('./wx/aesDecrypt')
-const settings  = require('./settings')
-const { ERRORS, LOGIN_STATE } = require('./wx/constants')
+const settings = require('./settings')
+const {ERRORS, LOGIN_STATE} = require('./wx/constants')
 
-function authorization (req) {
+async function authorization(req) {
     const {
         'x-wx-code': code,
         'x-wx-encrypted-data': encryptedData,
         'x-wx-iv': iv
     } = req.headers
 
+    console.log(req.headers)
+
     // 检查 headers
     if ([code, encryptedData, iv].every(v => !v)) {
         throw new Error(ERRORS.ERR_HEADER_MISSED)
     }
 
-    debug('Auth: code: %s', code)
-
     // 如果只有 code 视为仅使用 code 登录
     if (code && !encryptedData && !iv) {
-        return getSessionKey(code).then(pkg => {
-            const { openid, session_key } = pkg
-            // 生成 3rd_session
-            const skey = sha1(session_key)
+        let pkg = await getSessionKey(code);
+        const {session_key} = pkg
+        console.log(session_key)
+        const skey = sha1(session_key)
 
-            return AuthDbService.getUserInfoByOpenId(openid).then(userinfo => {
-                const wxUserInfo = JSON.parse(userinfo.user_info)
-
-                return AuthDbService.saveUserInfo(wxUserInfo, skey, session_key)
-                    .then(userinfo => ({
-                        loginState: LOGIN_STATE.SUCCESS,
-                        userinfo: {
-                            userinfo: wxUserInfo,
-                            skey: userinfo.skey
-                        }
-                    }))
-            })
-        })
+        console.log(skey)
     }
 
-    debug('Auth: encryptedData: %s, iv: %s', encryptedData, iv)
+    let pkg = await getSessionKey(code);
+    const {session_key} = pkg
+    const skey = sha1(session_key)
 
-    // 获取 session key
-    return getSessionKey(code)
-        .then(pkg => {
-            const { session_key } = pkg
-            // 生成 3rd_session
-            const skey = sha1(session_key)
+    // 解密数据
+    let decryptedData
+    try {
+        decryptedData = aesDecrypt(session_key, iv, encryptedData)
+        decryptedData = JSON.parse(decryptedData)
+    } catch (e) {
+        throw new Error(`${ERRORS.ERR_IN_DECRYPT_DATA}\n${e}`)
+    }
 
-            // 解密数据
-            let decryptedData
-            try {
-                decryptedData = aesDecrypt(session_key, iv, encryptedData)
-                decryptedData = JSON.parse(decryptedData)
-            } catch (e) {
-                throw new Error(`${ERRORS.ERR_IN_DECRYPT_DATA}\n${e}`)
-            }
-
-            // 存储到数据库中
-            return {
-                decryptedData,
-                skey: skey,
-                session_key: session_key
-            }
-        })
+    // 存储到数据库中
+    return {
+        userInfo: decryptedData,
+        skey: skey,
+        session_key: session_key
+    }
 }
 
-function validation (req) {
-    const { 'x-wx-skey': skey } = req.headers
+function validation(req) {
+    const {'x-wx-skey': skey} = req.headers
     if (!skey) throw new Error(ERRORS.ERR_SKEY_INVALID)
 
     return true
@@ -97,45 +79,52 @@ function validation (req) {
     //     })
 }
 
-function authorizationMiddleware (req, res, next) {
-    return authorization(req).then(result => {
-        console.log(result)
-        return next()
-    })
+async function authorizationMiddleware(req, res, next) {
+    console.log(req.sessionID)
+    var result = await authorization(req)
+
+    req.session.session_key = result.session_key;
+    req.session.skey = req.sessionID
+    req.session.userInfo = result.userInfo;
+
+    return next()
 }
 
-function validationMiddleware (req, res, next) {
-    return validation(req).then(result => {
-        console.log(result)
-        return next()
+// function validationMiddleware(req, res, next) {
+//     var result = await validation(req)
+//     console.log(result)
+//
+//     return next()
+// }
+
+function getSessionKey(code) {
+
+    return new Promise((resolve, reject) => {
+        request({
+            method: 'get',
+            uri: 'https://api.weixin.qq.com/sns/jscode2session',
+            json: true,
+            qs: {
+                grant_type: 'authorization_code',
+                appid: settings.wx_appID,
+                secret: settings.wx_appSecret,
+                js_code: code
+            }
+        }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                resolve(body);
+            }
+            else {
+                reject(json);
+            }
+
+        });
     })
-}
-
-function getSessionKey (code) {
-
-    request.get({
-        uri: 'https://api.weixin.qq.com/sns/jscode2session',
-        json: true,
-        qs: {
-            grant_type: 'authorization_code',
-            appid: settings.wx_appID,
-            secret: settings.wx_appSecret,
-            js_code: code
-        }
-    }, (err, response, data) => {
-        if (response.statusCode === 200) {
-
-            return response
-        } else {
-            throw new Error(`${ERRORS.ERR_GET_SESSION_KEY}\n${JSON.stringify(res)}`)
-        }
-    })
-
 }
 
 module.exports = {
     authorization,
     validation,
     authorizationMiddleware,
-    validationMiddleware
+    // validationMiddleware
 }

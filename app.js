@@ -21,7 +21,7 @@ app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true }));
 app.use(cookieParser(settings.encrypt_key));
 let sessionConfig = {
-    name: settings.auth_cookie_name,
+    name: settings.admin_auth_cookie_name,
     secret: settings.encrypt_key,
     cookie: {
         secure: false,
@@ -34,7 +34,7 @@ let sessionConfig = {
         port: settings.redis_port,
         host: settings.redis_host,
         pass: settings.redis_psd,
-        ttl: 1800 // 过期时间
+        ttl: settings.redis_ttl // 过期时间
     })
 };
 app.use(session(sessionConfig));
