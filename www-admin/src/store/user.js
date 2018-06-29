@@ -16,6 +16,25 @@ const state = () => ({
     passwordConfirmed: '',
     mobile: ''
   },
+  loginForm: {
+    userName: '',
+    password: ''
+  },
+  loginRule: {
+    userName: [
+      {
+        required: true,
+        validator: validateUserName,
+        trigger: 'blur'}
+    ],
+    password: [
+      {
+        required: true,
+        validator: validatePassword,
+        trigger: 'blur'
+      }
+    ]
+  },
   itemDialog: {
     visable: false,
     title: ''
@@ -43,28 +62,6 @@ var validatePassword = (rule, value, callback) => {
     callback()
   }
 }
-
-// var validatePasswordConfirmed = (rule, value, callback) => {
-//   if (value === '') {
-//     callback(new Error('请输入确认密码'))
-//   } else {
-//     if (value !== this.state.itemForm.password) {
-//       callback(new Error('两次输入密码不一致!'))
-//     }
-//     callback()
-//   }
-// }
-//
-// var validateMobile = (rule, value, callback) => {
-//   if (value === '') {
-//     callback(new Error('请输入手机号'))
-//   } else {
-//     if (!validatorUtil.checkMobilePhone(value)) {
-//       callback(new Error('请输入正确的手机号'))
-//     }
-//     callback()
-//   }
-// }
 
 const mutations = {
   'receiveList' (state, {list, pageInfo}) {

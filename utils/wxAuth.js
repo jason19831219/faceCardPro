@@ -5,56 +5,51 @@ const aesDecrypt = require('./wx/aesDecrypt')
 const settings = require('./settings')
 const {ERRORS, LOGIN_STATE} = require('./wx/constants')
 
-async function authorization(req) {
+async function authorization(req, res, next) {
     const {
         'x-wx-code': code,
         'x-wx-encrypted-data': encryptedData,
         'x-wx-iv': iv
     } = req.headers
 
-    console.log(req.headers)
-
-    // 检查 headers
     if ([code, encryptedData, iv].every(v => !v)) {
         throw new Error(ERRORS.ERR_HEADER_MISSED)
     }
+    const pkg = await getSessionKey(code);
+    const { session_key, openid } = pkg;
+    const skey = sha1(session_key);
+    var decryptedData = ''
 
-    // 如果只有 code 视为仅使用 code 登录
-    if (code && !encryptedData && !iv) {
-        let pkg = await getSessionKey(code);
-        const {session_key} = pkg
-        console.log(session_key)
-        const skey = sha1(session_key)
-
-        console.log(skey)
-    }
-
-    let pkg = await getSessionKey(code);
-    const {session_key} = pkg
-    const skey = sha1(session_key)
-
-    // 解密数据
-    let decryptedData
-    try {
+    if(encryptedData){
         decryptedData = aesDecrypt(session_key, iv, encryptedData)
         decryptedData = JSON.parse(decryptedData)
-    } catch (e) {
-        throw new Error(`${ERRORS.ERR_IN_DECRYPT_DATA}\n${e}`)
     }
 
-    // 存储到数据库中
-    return {
-        userInfo: decryptedData,
-        skey: skey,
-        session_key: session_key
+    req.session.session_key = session_key;
+    req.session.openId = openid;
+    req.session.skey = skey
+    if(decryptedData){
+        req.session.userInfo = decryptedData;
     }
+
+    return next()
+
 }
 
-function validation(req) {
-    const {'x-wx-skey': skey} = req.headers
-    if (!skey) throw new Error(ERRORS.ERR_SKEY_INVALID)
+function validation(req, res, next) {
+    const {
+        'x-wx-skey': skey
+    } = req.headers
 
-    return true
+    if (!skey) {
+        throw new Error(ERRORS.ERR_SKEY_INVALID)
+    }
+
+    if(req.session.skey){
+        console.log(req.session.skey)
+    }
+
+    return next()
     // return AuthDbService.getUserInfoBySKey(skey)
     //     .then(result => {
     //         if (result.length === 0) throw new Error(ERRORS.ERR_SKEY_INVALID)
@@ -79,16 +74,18 @@ function validation(req) {
     //     })
 }
 
-async function authorizationMiddleware(req, res, next) {
-    console.log(req.sessionID)
-    var result = await authorization(req)
-
-    req.session.session_key = result.session_key;
-    req.session.skey = req.sessionID
-    req.session.userInfo = result.userInfo;
-
-    return next()
-}
+// async function authorizationMiddleware(req, res, next) {
+//     var result = await authorization(req)
+//     req.session.session_key = result.session_key;
+//     req.session.openId = result.openId;
+//     req.session.skey = result.skey
+//     if(result.userInfo){
+//         req.session.userInfo = result.userInfo;
+//     }
+//
+//
+//     return next()
+// }
 
 // function validationMiddleware(req, res, next) {
 //     var result = await validation(req)
@@ -111,6 +108,7 @@ function getSessionKey(code) {
                 js_code: code
             }
         }, (error, response, body) => {
+            console.log(body)
             if (!error && response.statusCode == 200) {
                 resolve(body);
             }
@@ -125,6 +123,6 @@ function getSessionKey(code) {
 module.exports = {
     authorization,
     validation,
-    authorizationMiddleware,
+    // authorizationMiddleware,
     // validationMiddleware
 }

@@ -18,8 +18,6 @@ const {
 
 
 router.post("/uploads", (req, res, next) => {
-    console.log(req.sessionID);
-
     let form = new formidable.IncomingForm();
     let uploadPath = settings.wep_image_upload_path;
     form.uploadDir = uploadPath;
@@ -54,6 +52,6 @@ router.post("/uploads", (req, res, next) => {
     }
 });
 
-router.get("/login",wxAuth.authorizationMiddleware, User.wxLogin);
+router.get("/login",wxAuth.authorization, User.wxLogin);
 
 module.exports = router;

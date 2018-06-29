@@ -20,6 +20,31 @@ class User {
         // super()
     }
 
+    async getAll(req, res, next) {
+        let pageNumber = req.query.pageNumber || 1;
+        let pageSize = req.query.pageSize || 10;
+        let searchKey = req.query.searchKey;
+        let queryObj = {};
+        if (searchKey) {
+            let reKey = new RegExp(searchKey, 'i')
+            queryObj.content = {$regex: reKey}
+        }
+        const admins = await AdminModel.find(queryObj).populate("password", "-salt").sort({
+            updateDate: -1
+        }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
+        const totalItems = await AdminModel.count(queryObj);
+        res.send({
+            state: 'success',
+            list: admins,
+            pageInfo: {
+                totalItems,
+                pageNumber: Number(pageNumber) || 1,
+                pageSize: Number(pageSize) || 10,
+                searchKey: searchKey || ''
+            }
+        })
+    }
+
     // async loginAction(req, res, next) {
     //   const form = new formidable.IncomingForm();
     //   form.parse(req, async (err, fields, files) => {
@@ -350,8 +375,6 @@ class User {
 // }
 
 
-
-
     async logOut(req, res, next) {
         req.session.destroy();
         res.clearCookie(settings.auth_cookie_name, {path: '/'});
@@ -361,95 +384,47 @@ class User {
     }
 
     async wxLogin(req, res, next) {
+        let userObj = {
+            openId: req.session.openId,
+            wxUserInfo: req.session.userInfo
+        };
+        if (req.session.userInfo && req.session.userInfo.unionId) {
+            userObj.unionId = req.session.userInfo.unionId
+        }
+        var user = {};
 
-
-
-        if (req.session.skey) {
-
-            // const userObj = {
-            //     title: fields.title,
-            //     author: [fields.author],
-            //     authorAvatarSrc: fields.authorAvatarSrc,
-            //     imgSrc: fields.imgSrc,
-            //     fromSite: fields.fromSite,
-            //     sticky: fields.sticky
-            // }
-            //
-            // try {
-            //     let article = await ArticleModel.find({title: fields.title})
-            //     if (!_.isEmpty(article)) {
-            //         res.send({
-            //             state: 'error',
-            //             message: '名字已存在！'
-            //         });
-            //     } else {
-            //         const newArticle = new ArticleModel(articleObj);
-            //         await newArticle.save();
-            //         res.send({
-            //             state: 'success',
-            //             id: '图片已保存'
-            //         });
-            //     }
-            // } catch (err) {
-            //     res.send({
-            //         state: 'error',
-            //         message: '保存数据失败:',
-            //     })
-            // }
-            //
-            // req.session.userInfo
+        try {
+            user = await UserModel.findOne({openId: userObj.openId})
+            if (!_.isEmpty(user)) {
+                delete user.wxUserInfo.openId;
+                res.send({
+                    code: 0,
+                    data: {
+                        skey: req.session.skey,
+                        userinfo: user.wxUserInfo
+                    }
+                })
+            } else {
+                const newUser = new UserModel(userObj);
+                await newUser.save();
+                delete newUser.wxUserInfo.openId;
+                res.send({
+                    code: 0,
+                    data: {
+                        skey: req.session.skey,
+                        userinfo: newUser.wxUserInfo
+                    }
+                })
+            }
+        } catch (err) {
             res.send({
-                code: 0,
-                data: {
-                    skey: req.session.skey,
-                    userinfo: req.session.userInfo
-                }
+                state: 'error',
+                message: '保存数据失败:',
             })
         }
-        // let code = req.headers[settings.WX_HEADER_CODE]
-        // let encryptedData = req.headers[settings.WX_HEADER_ENCRYPTED_DATA]
-        // let iv = req.headers[settings.WX_HEADER_IV]
-        // request.get({
-        //     uri: 'https://api.weixin.qq.com/sns/jscode2session',
-        //     json: true,
-        //     qs: {
-        //         grant_type: 'authorization_code',
-        //         appid: settings.wx_appID,
-        //         secret: settings.wx_appSecret,
-        //         js_code: code
-        //     }
-        // }, (err, response, data) => {
-        //     if (response.statusCode === 200) {
-        //
-        //         let session_key = sha1(data.session_key)
-        //         let appId = settings.wx_appID
-        //         let wxvdc = new WXBizDataCrypt(appId, data.session_key);
-        //         let wxvdcdata = wxvdc.decryptData(encryptedData, iv);
-        //
-        //         req.session.session_key = session_key;
-        //         req.session.openid = data.openid;
-        //         req.session.nickName = wxvdcdata.nickName;
-        //         req.session.gender = wxvdcdata.gender;
-        //         req.session.language = wxvdcdata.language;
-        //         req.session.city = wxvdcdata.city;
-        //         req.session.province = wxvdcdata.province;
-        //         req.session.country = wxvdcdata.country;
-        //         req.session.avatarUrl = wxvdcdata.avatarUrl;
-        //         req.session.watermark = wxvdcdata.watermark;
-        //
-        //         res.send({
-        //             code: 0,
-        //             data: {
-        //                 skey: session_key,
-        //                 userinfo: wxvdcdata
-        //             }
-        //         })
-        //     } else {
-        //         console.log("[error]", err)
-        //         res.json(err)
-        //     }
-        // })
+
     }
+
 
 }
 

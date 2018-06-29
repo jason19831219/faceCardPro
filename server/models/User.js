@@ -11,16 +11,11 @@ var UserSchema = new Schema({
 		"default": shortid.generate
 	},
 	userName: {
-		type: String,
-		unique: true,
-		required: true
+		type: String
 	},
 	mobile: {
 		type: Number,
 		unique: true
-	},
-	nickName: {
-		type: String
 	},
 	salt: {
 		type: String
@@ -40,9 +35,6 @@ var UserSchema = new Schema({
 	    type: String,
 		default: "/upload/images/defaultlogo.png"
 	},
-	gender: {
-		type: String
-	},
     openId: {
         type: String,
         unique: true
@@ -52,7 +44,7 @@ var UserSchema = new Schema({
         unique: true
     },
 	wxUserInfo: {
-		type: {}
+		type: Object
 	}
 });
 
@@ -66,9 +58,9 @@ UserSchema.path("updateDate").get(function (v) {
 	return moment(v).format("YYYY-MM-DD HH:mm:ss");
 });
 
-UserSchema.methods.setUserName = function (mobile) {
-	this.userName = "uid_"+mobile;
-};
+// UserSchema.methods.setUserName = function (mobile) {
+// 	this.userName = "uid_"+mobile;
+// };
 
 UserSchema.methods.setPassword = function (password) {
 	this.salt = crypto.randomBytes(16).toString("hex");

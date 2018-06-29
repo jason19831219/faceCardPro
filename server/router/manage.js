@@ -13,6 +13,7 @@ const base64Img = require("base64-img");
 const {
 	Admin,
 	Star,
+	User
 } = require("../controller");
 const {
 	service,
@@ -45,17 +46,10 @@ router.post("/star/addOne",authAdmin, Star.addOne);
 router.post("/star/updateOne",authAdmin, Star.updateOne);
 router.get("/star/deleteOne",authAdmin, Star.deleteOne);
 
-// router.get("/article/getAll", authAdmin, Article.getAll);
-// router.post("/article/addOne",authAdmin, Article.addOne);
-// router.post("/article/updateOne",authAdmin, Article.updateOne);
-// router.get("/article/deleteOne",authAdmin, Article.deleteOne);
-//
-// router.post("/moji/addOne",authAdmin, Moji.addOne);
-// router.get("/moji/getAll",authAdmin, Moji.getAll);
-//
-// router.post("/mojiSet/addOne",authAdmin, MojiSet.addOne);
-// router.post("/mojiSet/updateMojiItem",authAdmin, MojiSet.updateMojiItem);
-// router.get("/mojiSet/getList",authAdmin, MojiSet.getList);
+router.get("/user/getAll", authAdmin, User.getAll);
+// router.post("/user/addOne",authAdmin, User.addOne);
+// router.post("/user/updateOne",authAdmin, User.updateOne);
+// router.get("/user/deleteOne",authAdmin, User.deleteOne);
 
 
 function base64_encode(file) {

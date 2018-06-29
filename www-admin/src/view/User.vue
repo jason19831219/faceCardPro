@@ -9,11 +9,27 @@
       ref="table">
       <el-table-column
         prop="userName"
-        label="userName">
+        label="userName"
+        width="400">
       </el-table-column>
       <el-table-column
         prop="mobile"
         label="mobile"
+        width="400">
+      </el-table-column>
+      <el-table-column
+        prop="openId"
+        label="openId"
+        width="400">
+      </el-table-column>
+      <el-table-column
+        prop="unionId"
+        label="unionId"
+        width="400">
+      </el-table-column>
+      <el-table-column
+        prop="wxUserInfo"
+        label="wxUserInfo"
         width="400">
       </el-table-column>
       <el-table-column
@@ -100,22 +116,22 @@ export default {
     handleAdd () {
       this.itemDialog.visable = true
       this.itemDialog.title = '添加'
-      this.$store.dispatch('admin/setForm', -1)
+      this.$store.dispatch('user/setForm', -1)
     },
     handleUpdate (index) {
       this.itemDialog.visable = true
       this.itemDialog.title = '修改'
-      this.$store.dispatch('admin/setForm', index)
+      this.$store.dispatch('user/setForm', index)
     },
     handleDelete (index) {
       this.itemDialog.visable = true
       this.itemDialog.title = '删除'
-      this.$store.dispatch('admin/setForm', index)
+      this.$store.dispatch('user/setForm', index)
     },
     addOne (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('admin/addOne', formName)
+          this.$store.dispatch('user/addOne', formName)
         } else {
           this.$message.error('error submit!!')
           return false
@@ -125,7 +141,7 @@ export default {
     updateOne (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('admin/updateOne')
+          this.$store.dispatch('user/updateOne')
         } else {
           this.$message.error('error submit!!')
           return false
@@ -135,7 +151,7 @@ export default {
     deleteOne (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('admin/deleteOne')
+          this.$store.dispatch('user/deleteOne')
         } else {
           this.$message.error('error submit!!')
           return false
@@ -143,10 +159,10 @@ export default {
       })
     },
     handleSizeChange (val) {
-      this.$store.dispatch('admin/setPageSize', val)
+      this.$store.dispatch('user/setPageSize', val)
     },
     handleCurrentChange (val) {
-      this.$store.dispatch('admin/setPageNumber', val)
+      this.$store.dispatch('user/setPageNumber', val)
     }
   },
   components: {},
@@ -229,7 +245,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('admin/getAll')
+    this.$store.dispatch('user/getAll')
   }
 }
 </script>

@@ -24,6 +24,7 @@
     "moment": "^2.22.2",
     "mongoose": "^5.1.4",
     "redis-connector": "0.0.0-deprecate",
+    "sha1": "^1.1.1",
     "shortid": "^2.2.8",
     "validator": "^10.3.0",
     "wafer-node-sdk": "^1.4.4"
