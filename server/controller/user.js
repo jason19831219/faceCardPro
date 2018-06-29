@@ -29,13 +29,13 @@ class User {
             let reKey = new RegExp(searchKey, 'i')
             queryObj.content = {$regex: reKey}
         }
-        const admins = await AdminModel.find(queryObj).populate("password", "-salt").sort({
+        const users = await UserModel.find(queryObj).populate("password", "-salt").sort({
             updateDate: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
-        const totalItems = await AdminModel.count(queryObj);
+        const totalItems = await UserModel.count(queryObj);
         res.send({
             state: 'success',
-            list: admins,
+            list: users,
             pageInfo: {
                 totalItems,
                 pageNumber: Number(pageNumber) || 1,

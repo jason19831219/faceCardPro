@@ -12,21 +12,21 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/manage': {
-        target: 'http://localhost:8080',
+        target: 'https://www.facecardpro.com',
         changeOrigin: true,
         pathRewrite: {
           "^/manage": "/manage"
         }
       },
       '/public': {
-        target: 'http://localhost:8080',
+        target: 'https://www.facecardpro.com',
         changeOrigin: true,
         pathRewrite: {
           "^/public": "/public"
         }
       },
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'https://www.facecardpro.com',
         changeOrigin: true,
         pathRewrite: {
           "^/api": "/api"

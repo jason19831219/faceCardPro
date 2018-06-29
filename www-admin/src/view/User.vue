@@ -30,7 +30,13 @@
       <el-table-column
         prop="wxUserInfo"
         label="wxUserInfo"
+        show-overflow-tooltip
         width="400">
+
+        <template slot-scope="scope">
+          <p v-for="(item,index) in scope.row.wxUserInfo" :key="index">
+            <span>{{index}}</span><span>:</span><span>{{item}}</span></p>
+        </template>
       </el-table-column>
       <el-table-column
         prop="createDate"
@@ -108,7 +114,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import validatorUtil from '@/utils/validation'
 
 export default {

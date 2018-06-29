@@ -63,6 +63,28 @@ var validatePassword = (rule, value, callback) => {
   }
 }
 
+// var validatePasswordConfirmed = (rule, value, callback) => {
+//   if (value === '') {
+//     callback(new Error('请输入确认密码'))
+//   } else {
+//     if (value !== this.state.itemForm.password) {
+//       callback(new Error('两次输入密码不一致!'))
+//     }
+//     callback()
+//   }
+// }
+//
+// var validateMobile = (rule, value, callback) => {
+//   if (value === '') {
+//     callback(new Error('请输入手机号'))
+//   } else {
+//     if (!validatorUtil.checkMobilePhone(value)) {
+//       callback(new Error('请输入正确的手机号'))
+//     }
+//     callback()
+//   }
+// }
+
 const mutations = {
   'receiveList' (state, {list, pageInfo}) {
     state.list = list
@@ -73,7 +95,7 @@ const mutations = {
 
 const actions = {
   async 'getAll' ({commit, state}) {
-    const {data} = await api.get('admin/getAll', {...state.listPageInfo}, true)
+    const {data} = await api.get('user/getAll', {...state.listPageInfo}, true)
     if (data.list && data.state === 'success') {
       commit('receiveList', {...data})
     }
@@ -87,7 +109,7 @@ const actions = {
     dispatch('getAll')
   },
   async 'addOne' ({commit, dispatch, state}) {
-    const {data} = await api.post('admin/addOne', {...state.itemForm}, true)
+    const {data} = await api.post('user/addOne', {...state.itemForm}, true)
     if (data.state === 'success') {
       Message({
         message: '保存成功',
@@ -102,7 +124,7 @@ const actions = {
     }
   },
   async 'updateOne' ({commit, dispatch, state}) {
-    const {data} = await api.post('admin/updateOne', {...state.itemForm}, true)
+    const {data} = await api.post('user/updateOne', {...state.itemForm}, true)
     if (data.state === 'success') {
       dispatch('getAll')
       Message({
@@ -117,7 +139,7 @@ const actions = {
     }
   },
   async 'deleteOne' ({commit, dispatch, state}) {
-    const {data} = await api.get('admin/deleteOne', {ids: state.itemForm._id}, true)
+    const {data} = await api.get('user/deleteOne', {ids: state.itemForm._id}, true)
     if (data.state === 'success') {
       dispatch('getAll')
       Message({

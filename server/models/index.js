@@ -23,3 +23,4 @@ db.on("close", function () {
 exports.Admin = require("./Admin");
 exports.User = require("./User");
 exports.Star = require("./Star");
+exports.FaceCard = require("./FaceCard");

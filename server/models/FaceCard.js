@@ -8,38 +8,39 @@ var Schema = mongoose.Schema;
 var moment = require("moment");
 moment.locale("zh-cn");
 var shortid = require("shortid");
+
 var FaceCardSchema = new Schema({
 	_id: {
 		type: String,
 		"default": shortid.generate
 	},
-	src: {
+	facePhoto: {
         type: String,
         require: true
 	},
-	title: {
-		type: String
-	},
+    sidePhoto: {
+        type: String,
+        default: "/public/images/sidePhoto.png"
+    },
+    backPhoto: {
+        type: String,
+        default: "/upload/images/backPhoto.jpg"
+    },
 	author: {
 		type: String,
-		default: ""
+        ref: "User",
+        require: true
 	},
-	authorAvatarSrc: {
-		type: String,
-        default: ""
+	refPic: {
+        type: String,
+        ref: "Star",
+        require: true
 	},
-	description: {
-		type: String,
-		default: ""
-	},
-	fromSite: {
-		type: String,
-		default: ""
-	},
-	sticky: {
-		type: Boolean,
-		default: false
-	},
+    hairParam: {
+        type: String,
+        enum : ['NEW','OLD'],
+        default: 'NEW'
+    },
 	createDate: {
 		type: Date,
 		default: Date.now
@@ -64,7 +65,5 @@ FaceCardSchema.path("updateDate").get(function (v) {
 	return moment(v).startOf("minute").fromNow();
 });
 
-var FaceCard = mongoose.model("Article", FaceCardSchema);
-
-module.exports = FaceCard;
+module.exports = mongoose.model("FaceCard", FaceCardSchema);
 

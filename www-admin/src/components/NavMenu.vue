@@ -14,7 +14,6 @@
         <span>导航一</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/">用户登录</el-menu-item>
         <el-menu-item index="/star">参考图</el-menu-item>
         <el-menu-item index="/admin">管理员</el-menu-item>
         <el-menu-item index="/user">用户</el-menu-item>
