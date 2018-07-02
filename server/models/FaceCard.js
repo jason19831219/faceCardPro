@@ -41,6 +41,58 @@ var FaceCardSchema = new Schema({
         enum : ['NEW','OLD'],
         default: 'NEW'
     },
+    age: {
+        type: String,
+        default: ''
+    },
+    angle: {
+        type: String,
+        default: ''
+    },
+    beauty: {
+        type: String,
+        default: ''
+    },
+    expression: {
+        type: String,
+        default: ''
+    },
+    face_probability: {
+        type: String,
+        default: ''
+    },
+    face_shape: {
+        type: String,
+        default: ''
+    },
+    face_token: {
+        type: String,
+        default: ''
+    },
+    gender: {
+        type: String,
+        default: ''
+    },
+    glasses: {
+        type: String,
+        default: ''
+    },
+    landmark: {
+        type: String,
+        default: ''
+    },
+    landmark72: {
+        type: String,
+        default: ''
+    },
+    location: {
+        type: String,
+        default: ''
+    },
+    race: {
+        type: String,
+        default: ''
+    },
 	createDate: {
 		type: Date,
 		default: Date.now

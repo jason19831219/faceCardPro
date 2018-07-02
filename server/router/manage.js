@@ -67,7 +67,6 @@ router.post("/startAipFace", function (req, res, next) {
 	options["face_field"] = "age,beauty,expression,faceshape,gender,glasses,landmark,race,qualities";
 	options["max_face_num"] = "1";
 
-	// 带参数调用人脸检测
 	client.detect(image, imageType, options).then(function(result) {
 		if(!result.error_code){
 			res.send(
@@ -79,7 +78,6 @@ router.post("/startAipFace", function (req, res, next) {
 		}
 
 	}).catch(function(err) {
-		// 如果发生网络错误
 		console.log(err);
 	});
 });
@@ -127,8 +125,6 @@ router.post("/uploads", (req, res, next) => {
 
 	let params = url.parse(req.url, true);
 	let fileType = params.query.type;
-	console.log(params)
-
 
 	let form = new formidable.IncomingForm();
 	let uploadPath = settings.upload_path;

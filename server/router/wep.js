@@ -16,6 +16,38 @@ const {
     wxAuth
 } = require("../../utils");
 
+var AipFaceClient = require("baidu-aip-sdk").face;
+var APP_ID = settings.aip_appID;
+var API_KEY = settings.aip_api_key;
+var SECRET_KEY = settings.aip_secret_key;
+
+
+router.post("/startAipFace", function (req, res, next) {
+    var fields = req.body;
+    var client = new AipFaceClient(APP_ID, API_KEY, SECRET_KEY);
+    var bitmap = fs.readFileSync(path.join(__dirname,"../../",fields.path));
+    var image = Buffer.from(bitmap).toString("base64");
+
+    var imageType = "BASE64";
+    var options = {};
+    options["face_field"] = "age,beauty,expression,faceshape,gender,glasses,landmark,race,qualities";
+    options["max_face_num"] = "1";
+
+    client.detect(image, imageType, options).then(function(result) {
+        if(!result.error_code){
+            res.send(
+                {
+                    state: "success",
+                    message: "分析成功",
+                    info:result.result.face_list
+                });
+        }
+
+    }).catch(function(err) {
+        console.log(err);
+    });
+});
+
 
 router.post("/uploads", (req, res, next) => {
     let form = new formidable.IncomingForm();
