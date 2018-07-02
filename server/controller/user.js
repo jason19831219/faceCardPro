@@ -132,10 +132,7 @@ class User {
             if (req.session.sign) {//检查用户是否已经登录
                 // console.log(req.session);//打印session的值
             } else {
-
-                // console.log(req.session);
                 req.session.sign = true;
-                req.session.name = 'https://github.com/CleverFan';
             }
             res.cookie('userId', '123412342134', {
                 path: '/',

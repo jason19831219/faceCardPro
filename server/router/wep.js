@@ -8,7 +8,8 @@ const path = require("path");
 
 // 新建一个对象，建议只保存一个对象调用服务接口
 const {
-    User
+    User,
+    Star
 } = require("../controller");
 const {
     service,
@@ -49,6 +50,7 @@ router.post("/startAipFace", function (req, res, next) {
 });
 
 
+
 router.post("/uploads", (req, res, next) => {
     let form = new formidable.IncomingForm();
     let uploadPath = settings.wep_image_upload_path;
@@ -85,5 +87,6 @@ router.post("/uploads", (req, res, next) => {
 });
 
 router.get("/login",wxAuth.authorization, User.wxLogin);
+router.get("/star/getAll", wxAuth.authorization, Star.getAll);
 
 module.exports = router;

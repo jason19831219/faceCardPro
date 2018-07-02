@@ -87,6 +87,12 @@ class Star {
         if (author) {
             queryObj.author = author;
         }
+        if (gender) {
+            queryObj.gender = gender;
+        }
+        if (facehape) {
+            queryObj.gender = face_shape;
+        }S
         const list = await StarModel.find(queryObj).sort({
             updateTime: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
