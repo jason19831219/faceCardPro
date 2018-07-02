@@ -58,18 +58,20 @@ const mutations = {
   },
   'receiveAipInfo' (state, {info}) {
     state.itemForm.age = info[0].age
-    state.itemForm.angle = JSON.stringify(info[0].angle)
+    state.itemForm.yaw = info[0].angle.yaw
+    state.itemForm.pitch = info[0].angle.pitch
+    state.itemForm.roll = info[0].angle.roll
     state.itemForm.beauty = info[0].beauty
-    state.itemForm.expression = JSON.stringify(info[0].expression)
+    state.itemForm.expression = info[0].expression.type
     state.itemForm.face_probability = info[0].face_probability
-    state.itemForm.face_shape = JSON.stringify(info[0].face_shape)
+    state.itemForm.face_shape = info[0].face_shape.type
     state.itemForm.face_token = info[0].face_token
-    state.itemForm.gender = JSON.stringify(info[0].gender)
-    state.itemForm.glasses = JSON.stringify(info[0].glasses)
+    state.itemForm.gender = info[0].gender.type
+    state.itemForm.glasses = info[0].glasses.type
     state.itemForm.landmark = JSON.stringify(info[0].landmark)
     state.itemForm.landmark72 = JSON.stringify(info[0].landmark72)
     state.itemForm.location = JSON.stringify(info[0].location)
-    state.itemForm.race = JSON.stringify(info[0].race)
+    state.itemForm.race = info[0].race.type
     console.log(info)
   }
 }

@@ -34,16 +34,16 @@ class Star {
             age: fields.age,
             angle: fields.angle,
             beauty: fields.beauty,
-            expression: fields.expression,
+            expression: fields.expression.type,
             face_probability: fields.face_probability,
-            face_shape: fields.face_shape,
+            face_shape: fields.face_shape.type,
             face_token: fields.face_token,
-            gender: fields.gender,
-            glasses: fields.glasses,
+            gender: fields.gender.type,
+            glasses: fields.glasses.type,
             landmark: fields.landmark,
             landmark72: fields.landmark72,
             location: fields.location,
-            race: fields.race
+            race: fields.race.type
         }
 
         try {
@@ -94,7 +94,7 @@ class Star {
         }
         if (faceShape) {
             queryObj.gender = face_shape;
-        }S
+        }
         const list = await StarModel.find(queryObj).sort({
             updateTime: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();

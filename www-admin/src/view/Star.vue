@@ -155,8 +155,14 @@
         <el-form-item label="age" prop="age">
           <el-input placeholder="age" v-model="itemForm.age"></el-input>
         </el-form-item>
-        <el-form-item label="angle" prop="angle">
-          <el-input placeholder="angle" v-model="itemForm.angle"></el-input>
+        <el-form-item label="yaw" prop="yaw">
+          <el-input placeholder="yaw" v-model="itemForm.yaw"></el-input>
+        </el-form-item>
+        <el-form-item label="pitch" prop="pitch">
+          <el-input placeholder="pitch" v-model="itemForm.pitch"></el-input>
+        </el-form-item>
+        <el-form-item label="roll" prop="roll">
+          <el-input placeholder="roll" v-model="itemForm.roll"></el-input>
         </el-form-item>
         <el-form-item label="beauty" prop="beauty">
           <el-input placeholder="beauty" v-model="itemForm.beauty"></el-input>

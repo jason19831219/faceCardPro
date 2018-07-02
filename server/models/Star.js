@@ -26,7 +26,15 @@ var StarSchema = new Schema({
         type: String,
         default: ''
 	},
-    angle: {
+    yaw: {
+        type: String,
+        default: ''
+    },
+    pitch: {
+        type: String,
+        default: ''
+    },
+    roll: {
         type: String,
         default: ''
     },

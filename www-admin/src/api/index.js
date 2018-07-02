@@ -42,7 +42,6 @@ function checkCode (res) {
   }
   return res
 }
-
 export default {
   post (url, data) {
     var urltemp = '/manage/' + url
