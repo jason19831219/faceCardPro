@@ -6,6 +6,11 @@ const settings = require('./settings')
 const {ERRORS, LOGIN_STATE} = require('./wx/constants')
 
 async function authorization(req, res, next) {
+
+    if (req.session.openId) {
+        return next();
+    }
+
     const {
         'x-wx-code': code,
         'x-wx-encrypted-data': encryptedData,

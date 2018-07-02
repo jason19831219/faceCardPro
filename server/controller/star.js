@@ -76,6 +76,8 @@ class Star {
         let nameReg = req.query.nameReg;
         let starId = req.query.starId;
         let author = req.query.author;
+        let gender = req.query.gender;
+        let faceShape = req.query.faceShape;
         let queryObj = {};
         if (starId) {
             queryObj.starId = starId;
@@ -90,7 +92,7 @@ class Star {
         if (gender) {
             queryObj.gender = gender;
         }
-        if (facehape) {
+        if (faceShape) {
             queryObj.gender = face_shape;
         }S
         const list = await StarModel.find(queryObj).sort({
