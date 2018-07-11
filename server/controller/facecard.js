@@ -51,8 +51,8 @@ class Article {
             return
         }
 
-        var src = req.body.src;
-        if (!src) {
+        var facePhoto = fields.facePhoto;
+        if (!facePhoto) {
             res.send({
                 state: 'error',
                 message: '图片没有上传成功'
@@ -61,7 +61,7 @@ class Article {
 
 
         const faceCardObj = {
-            facePhoto: fields.src,
+            facePhoto: fields.facePhoto,
             sidePhoto: fields.sidePhoto,
             backPhoto: fields.backPhoto,
             age: fields.age,
@@ -123,7 +123,7 @@ class Article {
             }
 
             const faceCardObj = {
-                facePhoto: fields.src,
+                facePhoto: fields.facePhoto,
                 sidePhoto: fields.sidePhoto,
                 backPhoto: fields.backPhoto,
                 age: fields.age,
