@@ -53,6 +53,9 @@ router.get("/user/getAll", authAdmin, User.getAll);
 // router.get("/user/deleteOne",authAdmin, User.deleteOne);
 
 router.get("/faceCard/getAll", authAdmin, FaceCard.getAll);
+router.post("/faceCard/addOne",authAdmin, FaceCard.addOne);
+router.post("/faceCard/updateOne",authAdmin, FaceCard.updateOne);
+router.get("/faceCard/deleteOne",authAdmin, FaceCard.deleteOne);
 
 function base64_encode(file) {
 	var bitmap = fs.readFileSync(path.join(__dirname,"../../",file));

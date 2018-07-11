@@ -61,7 +61,6 @@ class Article {
 
 
         const faceCardObj = {
-            author: req.session.userId,
             facePhoto: fields.src,
             age: fields.age,
             yaw: fields.yaw,
@@ -79,7 +78,13 @@ class Article {
             location: fields.location,
             race: fields.race
         }
-        console.log(faceCardObj)
+
+        if(fields.author){
+            faceCardObj.author = fields.author
+        }else{
+            faceCardObj.author = req.session.userId
+        }
+
         try {
             let faceCard = await FaceCardModel.find({src: faceCardObj.src})
             if (!_.isEmpty(faceCard)) {
@@ -116,7 +121,6 @@ class Article {
             }
 
             const faceCardObj = {
-                author: req.session.userId,
                 facePhoto: fields.src,
                 age: fields.age,
                 yaw: fields.yaw,
@@ -134,6 +138,13 @@ class Article {
                 location: fields.location,
                 race: fields.race
             }
+
+            if(fields.author){
+                faceCardObj.author = fields.author
+            }else{
+                faceCardObj.author = req.session.userId
+            }
+
             await FaceCardModel.findOneAndUpdate({ _id: fields._id }, { $set: faceCardObj });
             res.send({
                 state: 'success',
