@@ -84,7 +84,7 @@ class Star {
         let yawMinus = req.query.yawMinus;
         let queryObj = {};
         if (starId) {
-            queryObj.starId = starId;
+            queryObj._id = starId;
         }
         if (nameReg) {
             let reKey = new RegExp(nameReg, 'i')

@@ -8,12 +8,14 @@ import Vuex from 'vuex'
 import Admin from './admin'
 import Star from './star'
 import User from './user'
+import FaceCard from './faceCard'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     admin: Admin,
     star: Star,
-    user: User
+    user: User,
+    faceCard: FaceCard
   }
 })

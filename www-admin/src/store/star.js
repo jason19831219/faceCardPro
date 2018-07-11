@@ -213,12 +213,6 @@ const actions = {
 }
 
 const getters = {
-  'loginForm' (state) {
-    return state.loginForm
-  },
-  'loginRule' (state) {
-    return state.loginRule
-  },
   'list' (state) {
     return state.list
   },

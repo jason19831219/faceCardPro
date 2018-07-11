@@ -44,11 +44,11 @@ class Article {
         let pageNumber = req.query.pageNumber || 1;
         let pageSize = req.query.pageSize || 10;
         let searchkey = req.query.searchkey;
-        let contentId = req.query.contentId;
+        let faceCardId = req.query.faceCardId;
         let author = req.query.user;
         let queryObj = {};
-        if (contentId) {
-            queryObj.contentId = contentId;
+        if (faceCardId) {
+            queryObj._id = faceCardId;
         }
         if (searchkey) {
             let reKey = new RegExp(searchkey, 'i')
@@ -58,10 +58,10 @@ class Article {
             queryObj.author = author;
         }
         queryObj.imgSrc = {$ne: []}
-        const articles = await ArticleModel.find(queryObj).sort({
+        const articles = await FaceCardModel.find(queryObj).sort({
             updateDate: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
-        const totalItems = await ArticleModel.count(queryObj);
+        const totalItems = await FaceCardModel.count(queryObj);
         res.send({
             state: 'success',
             list: articles,

@@ -255,89 +255,88 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
+import {mapGetters} from 'vuex'
 
-  export default {
-    methods: {
-      handleAdd() {
-        this.itemDialog.visable = true
-        this.itemDialog.title = '添加'
-        this.$store.dispatch('star/setForm', -1)
-      },
-      handleUpdate(index) {
-        this.itemDialog.visable = true
-        this.itemDialog.title = '修改'
-        this.$store.dispatch('star/setForm', index)
-      },
-      handleDelete(index) {
-        this.itemDialog.visable = true
-        this.itemDialog.title = '删除'
-        this.$store.dispatch('star/setForm', index)
-      },
-      addOne(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$store.dispatch('star/addOne')
-          } else {
-            console.log(valid)
-            this.$message.error('error submit!!')
-            return false
-          }
-        })
-      },
-      updateOne(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$store.dispatch('star/updateOne')
-          } else {
-            this.$message.error('error submit!!')
-            return false
-          }
-        })
-      },
-      deleteOne(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$store.dispatch('star/deleteOne')
-          } else {
-            this.$message.error('error submit!!')
-            return false
-          }
-        })
-      },
-      handleSizeChange(val) {
-        this.$store.dispatch('star/setPageSize', val)
-      },
-      handleCurrentChange(val) {
-        this.$store.dispatch('star/setPageNumber', val)
-      },
-      uploadImage(event) {
-        this.$store.dispatch('star/uploadImage', event)
-      },
-      getAipInfo(event) {
-        this.$store.dispatch('star/getAipInfo', event)
-      }
+export default {
+  methods: {
+    handleAdd () {
+      this.itemDialog.visable = true
+      this.itemDialog.title = '添加'
+      this.$store.dispatch('faceCard/setForm', -1)
     },
-    components: {},
-    computed: {
-      ...mapGetters({
-        list: 'star/list',
-        listInfo: 'star/listInfo',
-        itemForm: 'star/itemForm',
-        itemRule: 'star/itemRule',
-        itemDialog: 'star/itemDialog',
-        aipInfo: 'star/aipInfo'
+    handleUpdate (index) {
+      this.itemDialog.visable = true
+      this.itemDialog.title = '修改'
+      this.$store.dispatch('faceCard/setForm', index)
+    },
+    handleDelete (index) {
+      this.itemDialog.visable = true
+      this.itemDialog.title = '删除'
+      this.$store.dispatch('faceCard/setForm', index)
+    },
+    addOne (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('faceCard/addOne')
+        } else {
+          console.log(valid)
+          this.$message.error('error submit!!')
+          return false
+        }
       })
     },
-    data() {
-      return {
-        src: ''
-      }
+    updateOne (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('faceCard/updateOne')
+        } else {
+          this.$message.error('error submit!!')
+          return false
+        }
+      })
     },
-    mounted() {
-      this.$store.dispatch('star/getAll')
+    deleteOne (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('faceCard/deleteOne')
+        } else {
+          this.$message.error('error submit!!')
+          return false
+        }
+      })
+    },
+    handleSizeChange (val) {
+      this.$store.dispatch('faceCard/setPageSize', val)
+    },
+    handleCurrentChange (val) {
+      this.$store.dispatch('faceCard/setPageNumber', val)
+    },
+    uploadImage (event) {
+      this.$store.dispatch('faceCard/uploadImage', event)
+    },
+    getAipInfo (event) {
+      this.$store.dispatch('faceCard/getAipInfo', event)
     }
+  },
+  components: {},
+  computed: {
+    ...mapGetters({
+      list: 'faceCard/list',
+      listInfo: 'faceCard/listInfo',
+      itemForm: 'faceCard/itemForm',
+      itemRule: 'faceCard/itemRule',
+      itemDialog: 'faceCard/itemDialog'
+    })
+  },
+  data () {
+    return {
+      src: ''
+    }
+  },
+  mounted () {
+    this.$store.dispatch('faceCard/getAll')
   }
+}
 </script>
 <style scoped="scoped">
 

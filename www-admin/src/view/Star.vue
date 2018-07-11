@@ -294,8 +294,7 @@ export default {
       listInfo: 'star/listInfo',
       itemForm: 'star/itemForm',
       itemRule: 'star/itemRule',
-      itemDialog: 'star/itemDialog',
-      aipInfo: 'star/aipInfo'
+      itemDialog: 'star/itemDialog'
     })
   },
   data () {
