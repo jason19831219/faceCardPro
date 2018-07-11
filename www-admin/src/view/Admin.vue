@@ -216,6 +216,9 @@ export default {
               if (value === '') {
                 callback(new Error('请输入手机号'))
               } else {
+                if (typeof value !== 'string') {
+                  value = value.toString()
+                }
                 if (!validatorUtil.checkMobilePhone(value)) {
                   callback(new Error('请输入正确的手机号'))
                 }

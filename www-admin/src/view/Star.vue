@@ -27,8 +27,20 @@
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="angle"
-        label="angle"
+        prop="yaw"
+        label="yaw"
+        width="200"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="pitch"
+        label="pitch"
+        width="200"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="roll"
+        label="roll"
         width="200"
         show-overflow-tooltip>
       </el-table-column>

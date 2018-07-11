@@ -74,48 +74,67 @@ class Article {
         })
     }
 
-    // async addOne(req, res) {
-    //     var fields = req.body;
-    //     var errmsg = checkFormData(fields);
-    //     if (errmsg != '') {
-    //         res.send({
-    //             state: 'error',
-    //             message: errmsg
-    //         })
-    //         return
-    //     }
-    //
-    //     const articleObj = {
-    //         title: fields.title,
-    //         author: [fields.author],
-    //         authorAvatarSrc: fields.authorAvatarSrc,
-    //         imgSrc: fields.imgSrc,
-    //         fromSite: fields.fromSite,
-    //         sticky: fields.sticky
-    //     }
-    //
-    //     try {
-    //         let article = await ArticleModel.find({title: fields.title})
-    //         if (!_.isEmpty(article)) {
-    //             res.send({
-    //                 state: 'error',
-    //                 message: '名字已存在！'
-    //             });
-    //         } else {
-    //             const newArticle = new ArticleModel(articleObj);
-    //             await newArticle.save();
-    //             res.send({
-    //                 state: 'success',
-    //                 id: '图片已保存'
-    //             });
-    //         }
-    //     } catch (err) {
-    //         res.send({
-    //             state: 'error',
-    //             message: '保存数据失败:',
-    //         })
-    //     }
-    // }
+    async addOne(req, res) {
+        var fields = req.body
+        var errmsg = service.checkFormData(fields);
+        if (errmsg != '') {
+            res.send({
+                state: 'error',
+                message: errmsg
+            })
+            return
+        }
+
+        var src = req.body.src;
+        if (!src) {
+            res.send({
+                state: 'error',
+                message: '图片没有上传成功'
+            })
+        }
+
+        const faceCardObj = {
+            name: fields.name,
+            src: fields.src,
+            age: fields.age,
+            yaw: fields.yaw,
+            pitch: fields.pitch,
+            roll: fields.roll,
+            beauty: fields.beauty,
+            expression: fields.expression,
+            face_probability: fields.face_probability,
+            face_shape: fields.face_shape,
+            face_token: fields.face_token,
+            gender: fields.gender,
+            glasses: fields.glasses,
+            landmark: fields.landmark,
+            landmark72: fields.landmark72,
+            location: fields.location,
+            race: fields.race
+        }
+
+        try {
+            let star = await FaceCardModel.find({name: fields.name})
+            if (!_.isEmpty(star)) {
+                res.send({
+                    state: 'error',
+                    message: '名字已存在！'
+                });
+            } else {
+                const newFaceCard = new FaceCardModel(faceCardObj);
+                await newFaceCard.save();
+                res.send({
+                    state: 'success',
+                    id: 'Star已保存'
+                });
+            }
+        } catch (err) {
+            res.send({
+                state: 'error',
+                message: '保存数据失败:',
+            })
+        }
+    }
 
     // async deleteOne(req, res, next) {
     //     try {

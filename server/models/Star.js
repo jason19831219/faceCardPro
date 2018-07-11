@@ -23,19 +23,19 @@ var StarSchema = new Schema({
 		default: ''
 	},
     age: {
-        type: String,
+        type: Number,
         default: ''
 	},
     yaw: {
-        type: String,
+        type: Number,
         default: ''
     },
     pitch: {
-        type: String,
+        type: Number,
         default: ''
     },
     roll: {
-        type: String,
+        type: Number,
         default: ''
     },
     beauty: {

@@ -145,6 +145,7 @@ class Admin {
     }
 
     async updateOne(req, res, next) {
+        console.log(req.body);
         var fields = req.body;
         try {
             service.checkFormData(fields);

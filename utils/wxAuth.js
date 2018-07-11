@@ -28,14 +28,12 @@ async function authorization(req, res, next) {
     if(encryptedData){
         decryptedData = aesDecrypt(session_key, iv, encryptedData)
         decryptedData = JSON.parse(decryptedData)
+        req.session.userInfo = decryptedData;
     }
 
     req.session.session_key = session_key;
     req.session.openId = openid;
     req.session.skey = skey
-    if(decryptedData){
-        req.session.userInfo = decryptedData;
-    }
 
     return next()
 

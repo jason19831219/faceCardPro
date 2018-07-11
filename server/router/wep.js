@@ -89,4 +89,6 @@ router.post("/uploads", (req, res, next) => {
 router.get("/login",wxAuth.authorization, User.wxLogin);
 router.get("/star/getAll", wxAuth.authorization, Star.getAll);
 
+router.get("/faceCard/addOne", wxAuth.authorization, Star.getAll);
+
 module.exports = router;

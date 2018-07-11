@@ -32,18 +32,20 @@ class Star {
             name: fields.name,
             src: fields.src,
             age: fields.age,
-            angle: fields.angle,
+            yaw: fields.yaw,
+            pitch: fields.pitch,
+            roll: fields.roll,
             beauty: fields.beauty,
-            expression: fields.expression.type,
+            expression: fields.expression,
             face_probability: fields.face_probability,
-            face_shape: fields.face_shape.type,
+            face_shape: fields.face_shape,
             face_token: fields.face_token,
-            gender: fields.gender.type,
-            glasses: fields.glasses.type,
+            gender: fields.gender,
+            glasses: fields.glasses,
             landmark: fields.landmark,
             landmark72: fields.landmark72,
             location: fields.location,
-            race: fields.race.type
+            race: fields.race
         }
 
         try {
@@ -78,6 +80,8 @@ class Star {
         let author = req.query.author;
         let gender = req.query.gender;
         let faceShape = req.query.faceShape;
+        let yaw = req.query.yaw;
+        let yawMinus = req.query.yawMinus;
         let queryObj = {};
         if (starId) {
             queryObj.starId = starId;
@@ -93,8 +97,12 @@ class Star {
             queryObj.gender = gender;
         }
         if (faceShape) {
-            queryObj.gender = face_shape;
+            queryObj.face_shape = faceShape;
         }
+        if (faceShape) {
+            queryObj.yaw = { $gt : yawMinus, $lt : yaw }
+        }
+
         const list = await StarModel.find(queryObj).sort({
             updateTime: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
