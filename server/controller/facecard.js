@@ -62,6 +62,8 @@ class Article {
 
         const faceCardObj = {
             facePhoto: fields.src,
+            sidePhoto: fields.sidePhoto,
+            backPhoto: fields.backPhoto,
             age: fields.age,
             yaw: fields.yaw,
             pitch: fields.pitch,
@@ -122,6 +124,8 @@ class Article {
 
             const faceCardObj = {
                 facePhoto: fields.src,
+                sidePhoto: fields.sidePhoto,
+                backPhoto: fields.backPhoto,
                 age: fields.age,
                 yaw: fields.yaw,
                 pitch: fields.pitch,
