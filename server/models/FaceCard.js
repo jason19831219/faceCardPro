@@ -8,12 +8,17 @@ var Schema = mongoose.Schema;
 var moment = require("moment");
 moment.locale("zh-cn");
 var shortid = require("shortid");
+var User = require("./User");
 
 var FaceCardSchema = new Schema({
 	_id: {
 		type: String,
 		"default": shortid.generate
 	},
+    author: {
+        type: String,
+        ref: "User",
+    },
 	facePhoto: {
         type: String,
         require: true
@@ -26,16 +31,6 @@ var FaceCardSchema = new Schema({
         type: String,
         default: "/upload/images/backPhoto.jpg"
     },
-	author: {
-		type: String,
-        ref: "User",
-        require: true
-	},
-	refPic: {
-        type: String,
-        ref: "Star",
-        require: true
-	},
     hairParam: {
         type: String,
         enum : ['NEW','OLD'],

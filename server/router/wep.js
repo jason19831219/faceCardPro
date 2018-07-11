@@ -9,7 +9,8 @@ const path = require("path");
 // 新建一个对象，建议只保存一个对象调用服务接口
 const {
     User,
-    Star
+    Star,
+    FaceCard
 } = require("../controller");
 const {
     service,
@@ -89,6 +90,6 @@ router.post("/uploads", (req, res, next) => {
 router.get("/login",wxAuth.authorization, User.wxLogin);
 router.get("/star/getAll", wxAuth.authorization, Star.getAll);
 
-router.get("/faceCard/addOne", wxAuth.authorization, Star.getAll);
+router.post("/faceCard/addOne", wxAuth.authorization, FaceCard.addOne);
 
 module.exports = router;

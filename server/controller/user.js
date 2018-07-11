@@ -383,7 +383,8 @@ class User {
     async wxLogin(req, res, next) {
         let userObj = {
             openId: req.session.openId,
-            wxUserInfo: req.session.userInfo
+            wxUserInfo: req.session.userInfo,
+            skey: req.session.skey
         };
         if (req.session.userInfo && req.session.userInfo.unionId) {
             userObj.unionId = req.session.userInfo.unionId
@@ -392,8 +393,10 @@ class User {
 
         try {
             user = await UserModel.findOne({openId: userObj.openId})
+            console.log(user)
             if (!_.isEmpty(user)) {
                 delete user.wxUserInfo.openId;
+                delete user.wxUserInfo.unionId;
                 res.send({
                     code: 0,
                     data: {
@@ -404,7 +407,9 @@ class User {
             } else {
                 const newUser = new UserModel(userObj);
                 await newUser.save();
+                console.log(newUser);
                 delete newUser.wxUserInfo.openId;
+                delete newUser.wxUserInfo.unionId;
                 res.send({
                     code: 0,
                     data: {

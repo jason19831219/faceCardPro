@@ -93,8 +93,8 @@ class Article {
             })
         }
 
+
         const faceCardObj = {
-            name: fields.name,
             src: fields.src,
             age: fields.age,
             yaw: fields.yaw,
@@ -112,20 +112,20 @@ class Article {
             location: fields.location,
             race: fields.race
         }
-
+        console.log(faceCardObj)
         try {
-            let star = await FaceCardModel.find({name: fields.name})
-            if (!_.isEmpty(star)) {
+            let faceCard = await FaceCardModel.find({src: faceCardObj.src})
+            if (!_.isEmpty(faceCard)) {
                 res.send({
                     state: 'error',
-                    message: '名字已存在！'
+                    message: '图片已存在！'
                 });
             } else {
                 const newFaceCard = new FaceCardModel(faceCardObj);
                 await newFaceCard.save();
                 res.send({
                     state: 'success',
-                    id: 'Star已保存'
+                    id: '已保存'
                 });
             }
         } catch (err) {

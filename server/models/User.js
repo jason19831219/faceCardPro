@@ -23,6 +23,9 @@ var UserSchema = new Schema({
     password: {
         type: String
     },
+    skey: {
+        type: String
+    },
     createDate: {
         type: Date,
         default: Date.now
