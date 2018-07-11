@@ -11,8 +11,10 @@ const state = () => ({
     nameReg: ''
   },
   itemForm: {
-    name: '',
-    src: '',
+    author: '',
+    facePhoto: '',
+    sidePhoto: '',
+    backPhoto: '',
     age: '',
     yaw: '',
     pitch: '',
@@ -30,7 +32,7 @@ const state = () => ({
     race: ''
   },
   itemRule: {
-    name: [
+    author: [
       {
         required: true,
         trigger: 'blur'
@@ -51,36 +53,35 @@ const state = () => ({
 
 const mutations = {
   'receiveList' (state, {list, pageInfo}) {
-    state.list = list
-    state.listInfo = pageInfo
-    state.itemDialog.visable = false
+    state.list = list;
+    state.listInfo = pageInfo;
+    state.itemDialog.visable = false;
   },
   'receiveImage' (state, {info}) {
-    state.itemForm.src = info.path
+    state.itemForm.src = info.path;
   },
   'receiveAipInfo' (state, {info}) {
-    state.itemForm.age = info[0].age
-    state.itemForm.yaw = info[0].angle.yaw
-    state.itemForm.pitch = info[0].angle.pitch
-    state.itemForm.roll = info[0].angle.roll
-    state.itemForm.beauty = info[0].beauty
-    state.itemForm.expression = info[0].expression.type
-    state.itemForm.face_probability = info[0].face_probability
-    state.itemForm.face_shape = info[0].face_shape.type
-    state.itemForm.face_token = info[0].face_token
-    state.itemForm.gender = info[0].gender.type
-    state.itemForm.glasses = info[0].glasses.type
-    state.itemForm.landmark = JSON.stringify(info[0].landmark)
-    state.itemForm.landmark72 = JSON.stringify(info[0].landmark72)
-    state.itemForm.location = JSON.stringify(info[0].location)
+    state.itemForm.age = info[0].age;
+    state.itemForm.yaw = info[0].angle.yaw;
+    state.itemForm.pitch = info[0].angle.pitch;
+    state.itemForm.roll = info[0].angle.roll;
+    state.itemForm.beauty = info[0].beauty;
+    state.itemForm.expression = info[0].expression.type;
+    state.itemForm.face_probability = info[0].face_probability;
+    state.itemForm.face_shape = info[0].face_shape.type;
+    state.itemForm.face_token = info[0].face_token;
+    state.itemForm.gender = info[0].gender.type;
+    state.itemForm.glasses = info[0].glasses.type;
+    state.itemForm.landmark = JSON.stringify(info[0].landmark);
+    state.itemForm.landmark72 = JSON.stringify(info[0].landmark72);
+    state.itemForm.location = JSON.stringify(info[0].location);
     state.itemForm.race = info[0].race.type
-    console.log(info)
   }
 }
 
 const actions = {
   async 'getAll' ({commit, state}) {
-    const {data} = await api.get('star/getAll', {...state.listInfo})
+    const {data} = await api.get('faceCard/getAll', {...state.listInfo})
     if (data.list && data.state === 'success') {
       commit('receiveList', {...data})
     }
@@ -94,7 +95,7 @@ const actions = {
     dispatch('getAll')
   },
   async 'addOne' ({commit, dispatch, state}) {
-    const {data} = await api.post('star/addOne', {...state.itemForm})
+    const {data} = await api.post('faceCard/addOne', {...state.itemForm})
     if (data.state === 'success') {
       Message({
         message: '保存成功',
@@ -109,7 +110,7 @@ const actions = {
     }
   },
   async 'updateOne' ({commit, dispatch, state}) {
-    const {data} = await api.post('star/updateOne', {...state.itemForm})
+    const {data} = await api.post('faceCard/updateOne', {...state.itemForm})
     if (data.state === 'success') {
       dispatch('getAll')
       Message({
@@ -124,7 +125,7 @@ const actions = {
     }
   },
   async 'deleteOne' ({commit, dispatch, state}) {
-    const {data} = await api.get('star/deleteOne', {ids: state.itemForm._id}, true)
+    const {data} = await api.get('faceCard/deleteOne', {ids: state.itemForm._id}, true)
     if (data.state === 'success') {
       dispatch('getAll')
       Message({

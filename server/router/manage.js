@@ -13,7 +13,8 @@ const base64Img = require("base64-img");
 const {
 	Admin,
 	Star,
-	User
+	User,
+	FaceCard
 } = require("../controller");
 const {
 	service,
@@ -51,6 +52,7 @@ router.get("/user/getAll", authAdmin, User.getAll);
 // router.post("/user/updateOne",authAdmin, User.updateOne);
 // router.get("/user/deleteOne",authAdmin, User.deleteOne);
 
+router.get("/faceCard/getAll", authAdmin, FaceCard.getAll);
 
 function base64_encode(file) {
 	var bitmap = fs.readFileSync(path.join(__dirname,"../../",file));

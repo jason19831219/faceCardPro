@@ -386,6 +386,7 @@ class User {
             wxUserInfo: req.session.userInfo,
             skey: req.session.skey
         };
+
         if (req.session.userInfo && req.session.userInfo.unionId) {
             userObj.unionId = req.session.userInfo.unionId
         }
@@ -397,6 +398,7 @@ class User {
             if (!_.isEmpty(user)) {
                 delete user.wxUserInfo.openId;
                 delete user.wxUserInfo.unionId;
+                req.session.userId = user._id
                 res.send({
                     code: 0,
                     data: {
@@ -407,9 +409,9 @@ class User {
             } else {
                 const newUser = new UserModel(userObj);
                 await newUser.save();
-                console.log(newUser);
                 delete newUser.wxUserInfo.openId;
                 delete newUser.wxUserInfo.unionId;
+                req.session.userId = newUser._id
                 res.send({
                     code: 0,
                     data: {

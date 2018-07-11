@@ -37,11 +37,19 @@ var FaceCardSchema = new Schema({
         default: 'NEW'
     },
     age: {
-        type: String,
+        type: Number,
         default: ''
     },
-    angle: {
-        type: String,
+    yaw: {
+        type: Number,
+        default: ''
+    },
+    pitch: {
+        type: Number,
+        default: ''
+    },
+    roll: {
+        type: Number,
         default: ''
     },
     beauty: {

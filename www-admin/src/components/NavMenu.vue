@@ -11,12 +11,13 @@
 
     <el-submenu index="1">
       <template slot="title">
-        <span>导航一</span>
+        <span>导航</span>
       </template>
       <el-menu-item-group>
         <el-menu-item index="/star">参考图</el-menu-item>
         <el-menu-item index="/admin">管理员</el-menu-item>
         <el-menu-item index="/user">用户</el-menu-item>
+        <el-menu-item index="/faceCard">脸卡</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 

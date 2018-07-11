@@ -36,7 +36,7 @@ function checkCode (res) {
   if (res.status === -500) {
     window.location.href = '/www-admin'
   } else if (res.status === -400) {
-    window.location.href = '/'
+    window.location.href = '/www-admin'
   } else if (res.status !== 200) {
     // createStore().dispatch('global/showMsg', res.data.message)
   }

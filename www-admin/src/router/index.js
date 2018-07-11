@@ -4,6 +4,7 @@ import Home from '@/view/Home'
 import User from '@/view/User'
 import Admin from '@/view/Admin'
 import Star from '@/view/Star'
+import FaceCard from '@/view/FaceCard'
 Vue.use(Router)
 
 export default new Router({
@@ -27,6 +28,11 @@ export default new Router({
       path: '/star',
       name: 'Star',
       component: Star
+    },
+    {
+      path: '/faceCard',
+      name: 'FaceCard',
+      component: FaceCard
     }
   ]
 })

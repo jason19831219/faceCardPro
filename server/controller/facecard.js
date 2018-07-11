@@ -95,7 +95,8 @@ class Article {
 
 
         const faceCardObj = {
-            src: fields.src,
+            author: req.session.userId,
+            facePhoto: fields.src,
             age: fields.age,
             yaw: fields.yaw,
             pitch: fields.pitch,
