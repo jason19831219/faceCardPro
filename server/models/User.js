@@ -14,8 +14,7 @@ var UserSchema = new Schema({
         type: String
     },
     mobile: {
-        type: Number,
-        unique: true
+        type: String
     },
     salt: {
         type: String
@@ -43,8 +42,7 @@ var UserSchema = new Schema({
         unique: true
     },
     unionId: {
-        type: String,
-        unique: true
+        type: String
     },
     wxUserInfo: {
         type: Object

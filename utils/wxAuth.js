@@ -11,6 +11,11 @@ async function authorization(req, res, next) {
         return next();
     }
 
+    if (req.headers.skey) {
+        req.session.skey = req.headers.skey
+        return next();
+    }
+
     const {
         'x-wx-code': code,
         'x-wx-encrypted-data': encryptedData,

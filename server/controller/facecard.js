@@ -1,10 +1,11 @@
 const FaceCardModel = require("../models").FaceCard;
+const UserModel = require("../models").User;
 const {settings, service} = require('../../utils');
 const _ = require('lodash');
 const chinaTime = require('china-time');
 
 
-class Article {
+class FaceCard {
 
     async getAll(req, res, next) {
         let pageNumber = req.query.pageNumber || 1;
@@ -24,19 +25,33 @@ class Article {
             queryObj.author = author;
         }
         queryObj.imgSrc = {$ne: []}
-        const articles = await FaceCardModel.find(queryObj).sort({
+
+        if(req.session.skey) {
+            let user = await UserModel.findOne({ skey: req.session.skey });
+            queryObj.author = user._id
+        }
+        const faceCards = await FaceCardModel.find(queryObj).sort({
             updateDate: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
         const totalItems = await FaceCardModel.count(queryObj);
         res.send({
             state: 'success',
-            list: articles,
+            list: faceCards,
             pageInfo: {
                 totalItems,
                 pageNumber: Number(pageNumber) || 1,
                 pageSize: Number(pageSize) || 10,
                 searchkey: searchkey || ''
             }
+        })
+    }
+
+    async getOne(req, res, next) {
+        let faceCardId = req.query.faceCardId;
+        const faceCard = await FaceCardModel.findById(faceCardId).exec();
+        res.send({
+            state: 'success',
+            faceCard: faceCard,
         })
     }
 
@@ -88,7 +103,7 @@ class Article {
         }
 
         try {
-            let faceCard = await FaceCardModel.find({src: faceCardObj.src})
+            let faceCard = await FaceCardModel.find({facePhoto: faceCardObj.facePhoto})
             if (!_.isEmpty(faceCard)) {
                 res.send({
                     state: 'error',
@@ -191,4 +206,4 @@ class Article {
 
 }
 
-module.exports = new Article();
+module.exports = new FaceCard();

@@ -399,28 +399,33 @@ class User {
                 delete user.wxUserInfo.openId;
                 delete user.wxUserInfo.unionId;
                 req.session.userId = user._id
+                req.session.userInfo = user.wxUserInfo
+                console.log(req.session.userInfo)
                 res.send({
                     code: 0,
                     data: {
                         skey: req.session.skey,
-                        userinfo: user.wxUserInfo
+                        userinfo: req.session.userInfo
                     }
                 })
             } else {
                 const newUser = new UserModel(userObj);
+                console.log(newUser);
                 await newUser.save();
                 delete newUser.wxUserInfo.openId;
                 delete newUser.wxUserInfo.unionId;
-                req.session.userId = newUser._id
+                req.session.userId = newUser._id;
+                console.log(req.session.userInfo)
                 res.send({
                     code: 0,
                     data: {
                         skey: req.session.skey,
-                        userinfo: newUser.wxUserInfo
+                        userinfo: req.session.userInfo
                     }
                 })
             }
         } catch (err) {
+            console.log(err)
             res.send({
                 state: 'error',
                 message: '保存数据失败:',

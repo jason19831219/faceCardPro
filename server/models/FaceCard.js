@@ -29,7 +29,7 @@ var FaceCardSchema = new Schema({
     },
     backPhoto: {
         type: String,
-        default: "/upload/images/backPhoto.png"
+        default: "/public/images/backPhoto.png"
     },
     hairParam: {
         type: String,
