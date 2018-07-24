@@ -38,6 +38,36 @@
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
+        prop="hairParam"
+        label="hairParam"
+        width="200"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="hairQuality"
+        label="hairQuality"
+        width="200"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="hairQuantity"
+        label="hairQuantity"
+        width="200"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="hairGranularity"
+        label="hairGranularity"
+        width="200"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="hairCrispation"
+        label="hairCrispation"
+        width="200"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
         prop="yaw"
         label="yaw"
         width="200"

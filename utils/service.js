@@ -177,6 +177,28 @@ let systemService = {
             userId: userObj.userId,
             exp: expires,
         }, settings.jwt_secret)
+    },
+
+    checkCurrentId(ids) {
+        if (!ids) return false;
+        let idState = true;
+        let idsArr = ids.split(",");
+        if (typeof idsArr === "object" && idsArr.length > 0) {
+            for (let i = 0; i < idsArr.length; i++) {
+                if (!shortid.isValid(idsArr[i])) {
+                    idState = false;
+                    break;
+                }
+            }
+        } else {
+            idState = false;
+        }
+        return idState;
+    },
+
+    UserException: function (message) {
+        this.message = message;
+        this.name = "UserException";
     }
 
 }

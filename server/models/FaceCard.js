@@ -9,6 +9,7 @@ var moment = require("moment");
 moment.locale("zh-cn");
 var shortid = require("shortid");
 var User = require("./User");
+var Star = require("./Star");
 
 var FaceCardSchema = new Schema({
 	_id: {
@@ -25,16 +26,44 @@ var FaceCardSchema = new Schema({
 	},
     sidePhoto: {
         type: String,
-        default: "/public/images/sidePhoto.png"
+        default: ''
     },
     backPhoto: {
         type: String,
-        default: "/public/images/backPhoto.png"
+        default: ''
+    },
+    star: {
+        type: String,
+        ref: "Star",
+    },
+    recommendPic: {
+        type: [String],
+        default: []
     },
     hairParam: {
         type: String,
         enum : ['NEW','OLD'],
         default: 'NEW'
+    },
+    hairQuality: {
+        type: String,
+        enum : ['SOFT','NORMAL','HARD'],
+        default: 'SOFT'
+    },
+    hairQuantity: {
+        type: String,
+        enum : ['LITTLE','NORMAL','LOT'],
+        default: 'LOT'
+    },
+    hairGranularity: {
+        type: String,
+        enum : ['THIN','NORMAL','THICK'],
+        default: 'NORMAL'
+    },
+    hairCrispation: {
+        type: String,
+        enum : ['NONE','NORMAL','LOT'],
+        default: 'NONE'
     },
     age: {
         type: Number,
@@ -96,7 +125,35 @@ var FaceCardSchema = new Schema({
         type: String,
         default: ''
     },
-	createDate: {
+    likeNum: {
+	    type: Number,
+        default: 0
+    }, // 喜欢数
+    likeUserIds: [{
+	    type: String,
+        default: []
+	}],
+    clickNum: {
+	    type: Number,
+        default: 1
+    },
+    isTop: {
+	    type: Number,
+        default: 1
+    },
+    street: {
+        type: String,
+        default: ''
+    },
+    district: {
+        type: String,
+        default: ''
+    },
+    editDate: {
+        type: Date,
+        default: Date.now
+    },
+    createDate: {
 		type: Date,
 		default: Date.now
 	},
@@ -114,10 +171,14 @@ FaceCardSchema.set("toJSON", {getters: true, virtuals: true});
 FaceCardSchema.set("toObject", {getters: true, virtuals: true});
 
 FaceCardSchema.path("createDate").get(function (v) {
-	return moment(v).startOf("hour").fromNow();
+	return moment(v).startOf("minute").fromNow();
 });
 FaceCardSchema.path("updateDate").get(function (v) {
 	return moment(v).startOf("minute").fromNow();
+});
+
+FaceCardSchema.path("editDate").get(function (v) {
+    return moment(v).startOf("minute").fromNow();
 });
 
 module.exports = mongoose.model("FaceCard", FaceCardSchema);

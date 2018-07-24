@@ -9,12 +9,16 @@ async function authorization(req, res, next) {
 
     if (req.session.openId) {
         return next();
+    } else if (req.headers.skey) {
+        res.send({
+            state: 'error',
+            message: 'session out'
+        })
+        return;
     }
 
-    if (req.headers.skey) {
-        req.session.skey = req.headers.skey
-        return next();
-    }
+
+    console.log(req.headers);
 
     const {
         'x-wx-code': code,
@@ -22,15 +26,24 @@ async function authorization(req, res, next) {
         'x-wx-iv': iv
     } = req.headers
 
-    if ([code, encryptedData, iv].every(v => !v)) {
-        throw new Error(ERRORS.ERR_HEADER_MISSED)
-    }
+    console.log(code+'safasdfasd')
+
+    // if ([code, encryptedData, iv].every(v => !v)) {
+    //     res.send({
+    //         state: 'error',
+    //         message: 'not auth'
+    //     })
+    //     return;
+    // }
+
+
     const pkg = await getSessionKey(code);
-    const { session_key, openid } = pkg;
+    console.log(pkg);
+    const {session_key, openid} = pkg;
     const skey = sha1(session_key);
     var decryptedData = ''
 
-    if(encryptedData){
+    if (encryptedData) {
         decryptedData = aesDecrypt(session_key, iv, encryptedData)
         decryptedData = JSON.parse(decryptedData)
         req.session.userInfo = decryptedData;
@@ -38,7 +51,12 @@ async function authorization(req, res, next) {
 
     req.session.session_key = session_key;
     req.session.openId = openid;
-    req.session.skey = skey
+
+    if (req.headers.skey) {
+        req.session.skey = req.headers.skey
+    } else {
+        req.session.skey = skey
+    }
 
     return next()
 
@@ -53,7 +71,7 @@ function validation(req, res, next) {
         throw new Error(ERRORS.ERR_SKEY_INVALID)
     }
 
-    if(req.session.skey){
+    if (req.session.skey) {
         console.log(req.session.skey)
     }
 
@@ -116,7 +134,6 @@ function getSessionKey(code) {
                 js_code: code
             }
         }, (error, response, body) => {
-            console.log(body)
             if (!error && response.statusCode == 200) {
                 resolve(body);
             }

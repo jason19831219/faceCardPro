@@ -10,7 +10,8 @@ const path = require("path");
 const {
     User,
     Star,
-    FaceCard
+    FaceCard,
+    Collection
 } = require("../controller");
 const {
     service,
@@ -27,7 +28,7 @@ var SECRET_KEY = settings.aip_secret_key;
 router.post("/startAipFace", function (req, res, next) {
     var fields = req.body;
     var client = new AipFaceClient(APP_ID, API_KEY, SECRET_KEY);
-    var bitmap = fs.readFileSync(path.join(__dirname,"../../",fields.path));
+    var bitmap = fs.readFileSync(path.join(__dirname, "../../", fields.path));
     var image = Buffer.from(bitmap).toString("base64");
 
     var imageType = "BASE64";
@@ -35,21 +36,20 @@ router.post("/startAipFace", function (req, res, next) {
     options["face_field"] = "age,beauty,expression,faceshape,gender,glasses,landmark,race,qualities";
     options["max_face_num"] = "1";
 
-    client.detect(image, imageType, options).then(function(result) {
-        if(!result.error_code){
+    client.detect(image, imageType, options).then(function (result) {
+        if (!result.error_code) {
             res.send(
                 {
                     state: "success",
                     message: "分析成功",
-                    info:result.result.face_list
+                    info: result.result.face_list
                 });
         }
 
-    }).catch(function(err) {
+    }).catch(function (err) {
         console.log(err);
     });
 });
-
 
 
 router.post("/uploads", (req, res, next) => {
@@ -87,12 +87,19 @@ router.post("/uploads", (req, res, next) => {
     }
 });
 
-router.get("/login",wxAuth.authorization, User.wxLogin);
+router.get("/login", wxAuth.authorization, User.wxLogin);
 router.get("/star/getAll", wxAuth.authorization, Star.getAll);
 
 
 router.get("/faceCard/getAll", wxAuth.authorization, FaceCard.getAll);
-router.get("/faceCard/getOne", wxAuth.authorization, FaceCard.getOne);
+router.get("/faceCard/getOne", FaceCard.getOne);
 router.post("/faceCard/addOne", wxAuth.authorization, FaceCard.addOne);
+router.post("/faceCard/updateOne", wxAuth.authorization, FaceCard.updateOne);
+router.get("/faceCard/deleteOne", wxAuth.authorization, FaceCard.deleteOne);
+router.get("/faceCard/updateLikeNum", wxAuth.authorization, FaceCard.updateLikeNum);
+router.get("/faceCard/findRandomOne", wxAuth.authorization, FaceCard.findRandomOne);
 
+router.post("/collection/addOne", wxAuth.authorization, Collection.addOne);
+router.get("/collection/deleteOne", wxAuth.authorization, Collection.deleteOne);
+router.get("/collection/getAll", wxAuth.authorization, Collection.getAll);
 module.exports = router;

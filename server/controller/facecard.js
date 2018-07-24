@@ -26,34 +26,69 @@ class FaceCard {
         }
         queryObj.imgSrc = {$ne: []}
 
-        if(req.session.skey) {
-            let user = await UserModel.findOne({ skey: req.session.skey });
+        if (req.session.skey) {
+            let user = await UserModel.findOne({skey: req.session.skey});
             queryObj.author = user._id
         }
-        const faceCards = await FaceCardModel.find(queryObj).sort({
-            updateDate: -1
-        }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
-        const totalItems = await FaceCardModel.count(queryObj);
-        res.send({
-            state: 'success',
-            list: faceCards,
-            pageInfo: {
-                totalItems,
-                pageNumber: Number(pageNumber) || 1,
-                pageSize: Number(pageSize) || 10,
-                searchkey: searchkey || ''
-            }
-        })
+        await FaceCardModel.find(queryObj).populate('star').sort({
+            editDate: -1
+        }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
+            const totalItems = await FaceCardModel.count(queryObj);
+            res.send({
+                state: 'success',
+                list: comments,
+                pageInfo: {
+                    totalItems,
+                    pageNumber: Number(pageNumber) || 1,
+                    pageSize: Number(pageSize) || 10,
+                    searchkey: searchkey || ''
+                }
+            })
+        });
     }
 
     async getOne(req, res, next) {
         let faceCardId = req.query.faceCardId;
-        const faceCard = await FaceCardModel.findById(faceCardId).exec();
-        res.send({
-            state: 'success',
-            faceCard: faceCard,
-        })
+        await FaceCardModel.findOneAndUpdate({_id: faceCardId}, {'$inc': {'clickNum': 1}}).populate('star').exec(function (err, comments) {
+            res.send({
+                state: 'success',
+                faceCard: comments,
+            })
+        });
     }
+
+    async findRandomOne(req, res, next) {
+        let gender = req.query.gender;
+        let faceShape = req.query.faceShape;
+        let yaw = req.query.yaw;
+        let yawMinus = req.query.yawMinus;
+        let queryObj = {};
+        if (gender) {
+            queryObj.gender = gender;
+        }
+        if (faceShape) {
+            queryObj.face_shape = faceShape;
+        }
+        if (faceShape) {
+            queryObj.yaw = {$gt: yawMinus, $lt: yaw}
+        }
+
+        queryObj.isTop = 1;
+
+
+        var number = await FaceCardModel.count(queryObj);
+        console.log(number);
+        var random = Math.floor(Math.random() * number);
+
+        await FaceCardModel.find(queryObj).limit(1).skip(random).exec(function (err, comments) {
+            console.log(comments)
+            res.send({
+                state: 'success',
+                faceCard: comments[0].id,
+            })
+        });
+    }
+
 
     async addOne(req, res) {
         var fields = req.body
@@ -76,9 +111,15 @@ class FaceCard {
 
 
         const faceCardObj = {
+            recommendPic: fields.recommendPic,
             facePhoto: fields.facePhoto,
             sidePhoto: fields.sidePhoto,
             backPhoto: fields.backPhoto,
+            star: fields.star,
+            hairQuality: fields.hairQuality,
+            hairQuantity: fields.hairQuantity,
+            hairGranularity: fields.hairGranularity,
+            hairCrispation: fields.hairCrispation,
             age: fields.age,
             yaw: fields.yaw,
             pitch: fields.pitch,
@@ -93,12 +134,15 @@ class FaceCard {
             landmark: fields.landmark,
             landmark72: fields.landmark72,
             location: fields.location,
-            race: fields.race
+            race: fields.race,
+            isTop: fields.isTop,
+            street: fields.street,
+            district: fields.district
         }
 
-        if(fields.author){
+        if (fields.author) {
             faceCardObj.author = fields.author
-        }else{
+        } else {
             faceCardObj.author = req.session.userId
         }
 
@@ -112,9 +156,13 @@ class FaceCard {
             } else {
                 const newFaceCard = new FaceCardModel(faceCardObj);
                 await newFaceCard.save();
+                console.log(newFaceCard)
                 res.send({
                     state: 'success',
-                    id: '已保存'
+                    data: {
+                        id: newFaceCard.id
+                    },
+                    message: '已保存'
                 });
             }
         } catch (err) {
@@ -137,10 +185,19 @@ class FaceCard {
                 return
             }
 
+            var time = new Date();
+            console.log(time)
+
             const faceCardObj = {
+                recommendPic: fields.recommendPic,
                 facePhoto: fields.facePhoto,
                 sidePhoto: fields.sidePhoto,
                 backPhoto: fields.backPhoto,
+                star: fields.star,
+                hairQuality: fields.hairQuality,
+                hairQuantity: fields.hairQuantity,
+                hairGranularity: fields.hairGranularity,
+                hairCrispation: fields.hairCrispation,
                 age: fields.age,
                 yaw: fields.yaw,
                 pitch: fields.pitch,
@@ -155,16 +212,29 @@ class FaceCard {
                 landmark: fields.landmark,
                 landmark72: fields.landmark72,
                 location: fields.location,
-                race: fields.race
+                race: fields.race,
+                isTop: fields.isTop,
+                street: fields.street,
+                district: fields.district,
+                editDate: time
             }
 
-            if(fields.author){
+            if (fields.author) {
                 faceCardObj.author = fields.author
-            }else{
+            } else {
                 faceCardObj.author = req.session.userId
             }
 
-            await FaceCardModel.findOneAndUpdate({ _id: fields._id }, { $set: faceCardObj });
+            if (req.session.adminlogined) {
+                await FaceCardModel.findOneAndUpdate({_id: fields._id}, {$set: faceCardObj});
+            } else {
+                var faceCard = await FaceCardModel.findById(fields._id).exec();
+                console.log(faceCard);
+                if (faceCard.author == req.session.userId) {
+                    await FaceCardModel.findOneAndUpdate({_id: fields._id}, {$set: faceCardObj});
+                }
+            }
+
             res.send({
                 state: 'success',
                 message: '更新成功',
@@ -172,33 +242,59 @@ class FaceCard {
         } catch (err) {
             res.send({
                 state: 'error',
-                message: '更新失败:'+ err,
+                message: '更新失败:' + err,
             })
         }
     }
+
     async deleteOne(req, res, next) {
         try {
-            var fields = req.query;
             let errMsg = '';
-            if (!service.checkIds(fields.ids)) {
+            if (!service.checkCurrentId(req.query.ids)) {
                 errMsg = '非法请求，请稍后重试！';
             }
             if (errMsg) {
-                res.send({
-                    state: 'error',
-                    message: errMsg
-                })
+                throw new service.UserException(errMsg);
             }
-            await FaceCardModel.remove({ _id: req.query.ids });
+            await FaceCardModel.remove({_id: req.query.ids});
             res.send({
-                state: 'success',
-                message: '删除成功'
+                state: 'success'
             });
         } catch (err) {
             res.send({
                 state: 'error',
                 type: 'ERROR_IN_SAVE_DATA',
                 message: '删除数据失败:' + err,
+            })
+        }
+    }
+
+    async updateLikeNum(req, res, next) {
+        let targetId = req.query.faceCardId;
+        let userId = req.session.userId;
+        try {
+            let oldContent = await FaceCardModel.findOne({_id: targetId});
+            if (!_.isEmpty(oldContent) && (oldContent.likeUserIds).indexOf(userId) > -1) {
+                res.send({
+                    state: 'error',
+                    type: 'ERROR_IN_UPDATE_DATA',
+                    message: '不可重复提交',
+                })
+            } else {
+                let newContent = await FaceCardModel.findOneAndUpdate({_id: targetId}, {
+                    '$inc': {'likeNum': 1},
+                    '$push': {'likeUserIds': userId}
+                });
+                res.send({
+                    state: 'success',
+                    likeNum: newContent.likeNum + 1
+                });
+            }
+        } catch (error) {
+            res.send({
+                state: 'error',
+                type: 'ERROR_IN_SAVE_DATA',
+                message: '更新数据失败:' + error,
             })
         }
     }

@@ -387,6 +387,13 @@ class User {
             skey: req.session.skey
         };
 
+        // if(!req.session.userInfo){
+        //     res.send({
+        //         state: 'error',
+        //         message: '没有用户信息:',
+        //     })
+        // }
+
         if (req.session.userInfo && req.session.userInfo.unionId) {
             userObj.unionId = req.session.userInfo.unionId
         }
@@ -400,29 +407,38 @@ class User {
                 delete user.wxUserInfo.unionId;
                 req.session.userId = user._id
                 req.session.userInfo = user.wxUserInfo
+                req.session.skey = user.skey
                 console.log(req.session.userInfo)
                 res.send({
                     code: 0,
                     data: {
-                        skey: req.session.skey,
+                        skey: user.skey,
                         userinfo: req.session.userInfo
                     }
                 })
             } else {
-                const newUser = new UserModel(userObj);
-                console.log(newUser);
-                await newUser.save();
-                delete newUser.wxUserInfo.openId;
-                delete newUser.wxUserInfo.unionId;
-                req.session.userId = newUser._id;
-                console.log(req.session.userInfo)
-                res.send({
-                    code: 0,
-                    data: {
-                        skey: req.session.skey,
-                        userinfo: req.session.userInfo
-                    }
-                })
+                if(!userObj.wxUserInfo){
+                    res.send({
+                        state: 'error',
+                        message: 'without login',
+                    })
+                }else{
+                    const newUser = new UserModel(userObj);
+                    await newUser.save();
+                    delete newUser.wxUserInfo.openId;
+                    delete newUser.wxUserInfo.unionId;
+                    req.session.skey = newUser.skey
+                    req.session.userId = newUser._id;
+                    console.log(req.session.userInfo)
+                    res.send({
+                        code: 0,
+                        data: {
+                            skey: newUser.skey,
+                            userinfo: req.session.userInfo
+                        }
+                    })
+                }
+
             }
         } catch (err) {
             console.log(err)

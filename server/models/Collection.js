@@ -8,6 +8,8 @@ var Schema = mongoose.Schema;
 var moment = require("moment");
 moment.locale("zh-cn");
 var shortid = require("shortid");
+var User = require("./User");
+var FaceCard = require("./FaceCard");
 var CollectionSchema = new Schema({
 	_id: {
 		type: String,
@@ -41,10 +43,10 @@ var CollectionSchema = new Schema({
 CollectionSchema.set("toJSON", { getters: true, virtuals: true });
 CollectionSchema.set("toObject", { getters: true, virtuals: true });
 CollectionSchema.path("createDate").get(function (v) {
-	return moment(v).format("YYYY-MM-DD");
+    return moment(v).startOf("minute").fromNow();
 });
 CollectionSchema.path("updateDate").get(function (v) {
-	return moment(v).format("YYYY-MM-DD");
+    return moment(v).startOf("minute").fromNow();
 });
 module.exports = mongoose.model("Collection", CollectionSchema);
 
