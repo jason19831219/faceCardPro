@@ -32,6 +32,48 @@
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
+        prop="recommendPic"
+        label="recommendPic"
+        width="400"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="likeNum"
+        label="likeNum"
+        width="400"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="likeUserIds"
+        label="likeUserIds"
+        width="400"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="clickNum"
+        label="clickNum"
+        width="400"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="isTop"
+        label="isTop"
+        width="400"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="street"
+        label="street"
+        width="400"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="district"
+        label="district"
+        width="400"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
         prop="age"
         label="age"
         width="200"
@@ -148,6 +190,12 @@
       <el-table-column
         prop="race"
         label="race"
+        width="200"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="editDate"
+        label="editDate"
         width="200"
         show-overflow-tooltip>
       </el-table-column>
