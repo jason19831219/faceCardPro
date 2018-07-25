@@ -149,6 +149,10 @@ var FaceCardSchema = new Schema({
         type: String,
         default: ''
     },
+    city: {
+        type: String,
+        default: ''
+    },
     editDate: {
         type: Date,
         default: Date.now

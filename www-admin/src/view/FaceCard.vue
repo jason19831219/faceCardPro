@@ -74,6 +74,12 @@
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
+        prop="city"
+        label="city"
+        width="400"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
         prop="age"
         label="age"
         width="200"

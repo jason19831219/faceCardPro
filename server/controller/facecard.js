@@ -137,7 +137,8 @@ class FaceCard {
             race: fields.race,
             isTop: fields.isTop,
             street: fields.street,
-            district: fields.district
+            district: fields.district,
+            city: fields.city
         }
 
         if (fields.author) {
@@ -216,6 +217,7 @@ class FaceCard {
                 isTop: fields.isTop,
                 street: fields.street,
                 district: fields.district,
+                city: fields.city,
                 editDate: time
             }
 
