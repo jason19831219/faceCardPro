@@ -14,7 +14,8 @@ var UserSchema = new Schema({
         type: String
     },
     mobile: {
-        type: String
+        type: String,
+        unique: true
     },
     salt: {
         type: String

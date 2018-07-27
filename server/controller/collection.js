@@ -67,7 +67,7 @@ class Moji {
             queryObj.user = user._id
         }
         await CollectionModel.find(queryObj).populate('faceCard').sort({
-            updateDate: -1
+            createDate: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
             const totalItems = await CollectionModel.count(queryObj);
             res.send({

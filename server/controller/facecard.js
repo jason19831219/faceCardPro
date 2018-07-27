@@ -31,7 +31,7 @@ class FaceCard {
             queryObj.author = user._id
         }
         await FaceCardModel.find(queryObj).populate('star').sort({
-            editDate: -1
+            createDate: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
             const totalItems = await FaceCardModel.count(queryObj);
             res.send({

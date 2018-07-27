@@ -395,7 +395,8 @@ class User {
         // }
 
         if (req.session.userInfo && req.session.userInfo.unionId) {
-            userObj.unionId = req.session.userInfo.unionId
+            userObj.unionId = req.session.userInfo.unionId;
+            userObj.mobile = req.session.userInfo.unionId
         }
         var user = {};
 
