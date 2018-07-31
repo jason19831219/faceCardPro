@@ -25,3 +25,4 @@ exports.User = require("./User");
 exports.Star = require("./Star");
 exports.FaceCard = require("./FaceCard");
 exports.Collection = require("./Collection");
+exports.View = require("./View");

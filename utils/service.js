@@ -173,7 +173,7 @@ let systemService = {
     generateJwt: function (userObj) {
         var expires = moment().add('days', 30).valueOf();
 
-            return jwt.sign({
+        return jwt.sign({
             userId: userObj.userId,
             exp: expires,
         }, settings.jwt_secret)
@@ -199,6 +199,12 @@ let systemService = {
     UserException: function (message) {
         this.message = message;
         this.name = "UserException";
+    },
+
+    randomArray: function (length, max) {
+        return Array.apply(null, Array(length)).map(function () {
+            return Math.round(Math.random() * max);
+        });
     }
 
 }

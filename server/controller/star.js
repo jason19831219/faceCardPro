@@ -72,9 +72,12 @@ class Star {
     }
 
 
+
+
     async getAll(req, res, next) {
         let pageNumber = req.query.pageNumber || 1;
         let pageSize = req.query.pageSize || 10;
+        let frontFlag = req.query.frontFlag || false;
         let nameReg = req.query.nameReg;
         let starId = req.query.starId;
         let author = req.query.author;
@@ -103,20 +106,53 @@ class Star {
             queryObj.yaw = { $gt : yawMinus, $lt : yaw }
         }
 
-        const list = await StarModel.find(queryObj).sort({
-            updateTime: -1
-        }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
-        const totalItems = await StarModel.count(queryObj);
-        res.send({
-            state: 'success',
-            list: list,
-            pageInfo: {
-                totalItems,
-                pageNumber: Number(pageNumber) || 1,
-                pageSize: Number(pageSize) || 10,
-                nameReg: nameReg || ''
+
+        if(!frontFlag){
+            const list = await StarModel.find(queryObj).sort({
+                updateTime: -1
+            }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec();
+            const totalItems = await StarModel.count(queryObj);
+            res.send({
+                state: 'success',
+                list: list,
+                pageInfo: {
+                    totalItems,
+                    pageNumber: Number(pageNumber) || 1,
+                    pageSize: Number(pageSize) || 10,
+                    nameReg: nameReg || ''
+                }
+            })
+        }else {
+            var list = await StarModel.find(queryObj).exec();
+            if(list.length<20){
+                delete queryObj.yaw;
+                var secondList = await StarModel.find(queryObj).exec();
+                secondList.forEach(function (value) {
+                    if(list.length<21){
+                        list.push(value)
+                    }
+                })
+            }else{
+                var randomList = service.randomArray(20, list.length)
+                var templist = {}
+                for (var i =0; i<20; i++){
+                    templist.push(list[randomList[i]])
+                }
+                console.log(templist)
+                list = templist
             }
-        })
+
+            res.send({
+                state: 'success',
+                list: list,
+                pageInfo: {
+                }
+            })
+
+        }
+
+
+
     }
 
     async updateOne(req, res, next) {
