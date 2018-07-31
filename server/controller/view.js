@@ -34,7 +34,9 @@ class Moji {
         }
 
         try {
-            let view = await ViewModel.findOne(viewObj)
+            let view = await ViewModel.findOne(viewObj).populate({path: 'user', select: 'id'}).exec(function (err, result) {
+                console.log(result)
+            })
             if (!_.isEmpty(view)) {
                 res.send({
                     state: 'error',
