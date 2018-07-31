@@ -38,14 +38,14 @@ class Moji {
             if (!_.isEmpty(view)) {
                 res.send({
                     state: 'error',
-                    message: '已收藏过！'
+                    message: '已阅读过！'
                 });
             } else {
                 const view = new ViewModel(viewObj);
                 await view.save();
                 res.send({
                     state: 'success',
-                    id: '收藏成功'
+                    id: '阅读成功'
                 });
             }
         } catch (err) {

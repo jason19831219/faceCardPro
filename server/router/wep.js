@@ -11,7 +11,8 @@ const {
     User,
     Star,
     FaceCard,
-    Collection
+    Collection,
+    View
 } = require("../controller");
 const {
     service,
@@ -102,4 +103,7 @@ router.get("/faceCard/findRandomOne", wxAuth.authorization, FaceCard.findRandomO
 router.post("/collection/addOne", wxAuth.authorization, Collection.addOne);
 router.get("/collection/deleteOne", wxAuth.authorization, Collection.deleteOne);
 router.get("/collection/getAll", wxAuth.authorization, Collection.getAll);
+
+router.post("/view/addOne", wxAuth.authorization, View.addOne);
+
 module.exports = router;
