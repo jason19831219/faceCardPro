@@ -212,7 +212,7 @@
 
       </el-form>
 
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" style="position: absolute; display: block; width: 100%; right: 50px; top: 50px;">
         <el-button @click="itemDialog.visable = false">取 消</el-button>
         <el-button type="primary" @click="getAipInfo()">检测</el-button>
         <el-button v-if="itemDialog.title == '添加'" type="primary" @click="addOne('itemForm')">{{itemDialog.title}}</el-button>

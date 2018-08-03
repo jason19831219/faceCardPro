@@ -25,6 +25,7 @@ class FaceCard {
             queryObj.author = author;
         }
         queryObj.imgSrc = {$ne: []}
+        queryObj.isRemove = 0;
 
         if (req.session.skey) {
             let user = await UserModel.findOne({skey: req.session.skey});
@@ -187,7 +188,6 @@ class FaceCard {
             }
 
             var time = new Date();
-            console.log(time)
 
             const faceCardObj = {
                 recommendPic: fields.recommendPic,
@@ -231,7 +231,6 @@ class FaceCard {
                 await FaceCardModel.findOneAndUpdate({_id: fields._id}, {$set: faceCardObj});
             } else {
                 var faceCard = await FaceCardModel.findById(fields._id).exec();
-                console.log(faceCard);
                 if (faceCard.author == req.session.userId) {
                     await FaceCardModel.findOneAndUpdate({_id: fields._id}, {$set: faceCardObj});
                 }
@@ -292,6 +291,25 @@ class FaceCard {
                     likeNum: newContent.likeNum + 1
                 });
             }
+        } catch (error) {
+            res.send({
+                state: 'error',
+                type: 'ERROR_IN_SAVE_DATA',
+                message: '更新数据失败:' + error,
+            })
+        }
+    }
+
+    async updateRemoveTag(req, res, next) {
+        let targetId = req.query.faceCardId;
+        try {
+            let newContent = await FaceCardModel.findOneAndUpdate({_id: targetId}, {
+                '$set': {'isRemove': 1}
+            });
+            res.send({
+                state: 'success',
+                newContent
+            });
         } catch (error) {
             res.send({
                 state: 'error',

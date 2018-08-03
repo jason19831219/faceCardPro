@@ -99,8 +99,11 @@ router.post("/faceCard/updateOne", wxAuth.authorization, FaceCard.updateOne);
 router.get("/faceCard/deleteOne", wxAuth.authorization, FaceCard.deleteOne);
 router.get("/faceCard/updateLikeNum", wxAuth.authorization, FaceCard.updateLikeNum);
 router.get("/faceCard/findRandomOne", wxAuth.authorization, FaceCard.findRandomOne);
+router.get("/faceCard/updateRemoveTag", wxAuth.authorization, FaceCard.updateRemoveTag);
+
 
 router.post("/collection/addOne", wxAuth.authorization, Collection.addOne);
+router.get("/collection/getOne", wxAuth.authorization, Collection.getOne);
 router.get("/collection/deleteOne", wxAuth.authorization, Collection.deleteOne);
 router.get("/collection/getAll", wxAuth.authorization, Collection.getAll);
 

@@ -141,6 +141,10 @@ var FaceCardSchema = new Schema({
 	    type: Number,
         default: 1
     },
+    isRemove: {
+        type: Number,
+        default: 0
+    },
     street: {
         type: String,
         default: ''

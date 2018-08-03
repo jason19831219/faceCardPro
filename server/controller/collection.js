@@ -45,7 +45,8 @@ class Moji {
                 await collection.save();
                 res.send({
                     state: 'success',
-                    id: '收藏成功'
+                    id: collection.id,
+                    message: '收藏成功！'
                 });
             }
         } catch (err) {
@@ -53,6 +54,25 @@ class Moji {
                 state: 'error',
                 message: '收藏失败:',
             })
+        }
+    }
+
+    async getOne(req, res, next) {
+        let queryObj = {};
+        queryObj.faceCard = req.query.faceCardId;
+        queryObj.user = req.session.userId
+        var collection = await CollectionModel.findOne(queryObj)
+        if (!_.isEmpty(collection)) {
+            res.send({
+                state: 'success',
+                id: collection.id,
+                message: '已收藏过！'
+            });
+        } else {
+            res.send({
+                state: 'success',
+                id: '未收藏过'
+            });
         }
     }
 
