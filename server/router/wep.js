@@ -6,6 +6,8 @@ const moment = require("moment");
 const fs = require("fs");
 const path = require("path");
 
+// const ViewModel = require("../models").View;
+
 // 新建一个对象，建议只保存一个对象调用服务接口
 const {
     User,
@@ -24,6 +26,40 @@ var AipFaceClient = require("baidu-aip-sdk").face;
 var APP_ID = settings.aip_appID;
 var API_KEY = settings.aip_api_key;
 var SECRET_KEY = settings.aip_secret_key;
+
+// async function checkViewFlag(req, res, next) {
+//
+//
+//     var viewObj = {}
+//
+//     if (req.body.view) {
+//         viewObj = {
+//             faceCard: req.body.view.faceCardId,
+//             event: req.body.view.type,
+//             user: req.body.view.userId || ''
+//         }
+//     } else {
+//         viewObj = {
+//             faceCard: req.query.faceCardId,
+//             event: req.query.viewType,
+//             user: req.query.userId || ''
+//         }
+//     }
+//
+//
+//     if (viewObj.user == '') {
+//         viewObj.user = req.session.userId
+//     }
+//     try {
+//
+//         const view = new ViewModel(viewObj);
+//         await view.save();
+//
+//     } catch (err) {
+//         console.log(err)
+//     }
+//     return next()
+// }
 
 
 router.post("/startAipFace", function (req, res, next) {

@@ -3,7 +3,6 @@
  * 管理员用户组对象
  */
 var mongoose = require("mongoose");
-
 var Schema = mongoose.Schema;
 var moment = require("moment");
 moment.locale("zh-cn");
@@ -22,12 +21,11 @@ var ViewSchema = new Schema({
 	},
 	user: {
 		type: String,
-		ref: "User",
-		require: true
+		ref: "User"
 	},
 	event: {
         type: String,
-        enum : ['CLICK','RECOMMEND','RETRY','SHARE','MOMENTS','EDIT'],
+        enum : ['CLICK','RECOMMEND','RETRY','SHARE','MOMENTS','EDIT', 'COLLECTION'],
         default: 'CLICK'
 	},
 	createDate: {

@@ -1,5 +1,6 @@
 const FaceCardModel = require("../models").FaceCard;
 const UserModel = require("../models").User;
+const ViewModel = require("../models").View;
 const {settings, service} = require('../../utils');
 const _ = require('lodash');
 const chinaTime = require('china-time');
@@ -221,6 +222,8 @@ class FaceCard {
                 city: fields.city,
                 editDate: time
             }
+
+            console.log(fields.author+fields._id+'sdfsdfsdf')
 
             if (fields.author) {
                 faceCardObj.author = fields.author

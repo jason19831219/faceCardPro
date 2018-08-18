@@ -4,7 +4,7 @@ const sha1 = require('./wx/sha1')
 const aesDecrypt = require('./wx/aesDecrypt')
 const settings = require('./settings')
 const {ERRORS, LOGIN_STATE} = require('./wx/constants')
-const ViewModel = require("../models").View;
+const ViewModel = require("../server/models").View;
 
 async function authorization(req, res, next) {
 
@@ -63,50 +63,7 @@ async function authorization(req, res, next) {
 
 }
 
-async function checkViewFlag(req, res, next) {
-    var fields = req.body
-    if(fields.view){
-        console.log(fields.view)
-    }else{
-        return next();
-    }
 
-    var viewObj = {
-        faceCard: fields.view.faceCardId,
-        event:fields.view.type
-    }
-
-    if(fields.user){
-        viewObj.user = fields.view.user
-    }else{
-        viewObj.user = req.session.userId
-    }
-
-    try {
-        let view = await ViewModel.findOne(viewObj).populate({path: 'user', select: 'id'}).exec(function (err, result) {
-            console.log(result)
-        })
-        if (!_.isEmpty(view)) {
-            res.send({
-                state: 'error',
-                message: '已阅读过！'
-            });
-        } else {
-            const view = new ViewModel(viewObj);
-            await view.save();
-            res.send({
-                state: 'success',
-                id: '阅读成功'
-            });
-        }
-    } catch (err) {
-        res.send({
-            state: 'error',
-            message: '收藏失败:',
-        })
-    }
-
-}
 
 function validation(req, res, next) {
     const {

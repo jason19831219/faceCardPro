@@ -11,51 +11,34 @@ class Moji {
     }
 
     async addOne(req, res) {
-        var fields = req.body
-        var errmsg = service.checkFormData(fields);
-        if (errmsg != '') {
-            res.send({
-                state: 'error',
-                message: errmsg
-            })
-            return
+        var viewObj = {}
+
+        if (req.body.view) {
+            viewObj = {
+                faceCard: req.body.view.faceCardId,
+                event: req.body.view.type,
+                user: req.body.view.userId || ''
+            }
         }
 
+        console.log()
 
 
-        var viewObj = {
-            faceCard: fields.faceCardId
-        }
-
-        if(fields.user){
-            viewObj.user = fields.user
-        }else{
+        if (viewObj.user == '') {
             viewObj.user = req.session.userId
         }
-
         try {
-            let view = await ViewModel.findOne(viewObj).populate({path: 'user', select: 'id'}).exec(function (err, result) {
-                console.log(result)
-            })
-            if (!_.isEmpty(view)) {
-                res.send({
-                    state: 'error',
-                    message: '已阅读过！'
-                });
-            } else {
-                const view = new ViewModel(viewObj);
-                await view.save();
-                res.send({
-                    state: 'success',
-                    id: '阅读成功'
-                });
-            }
+
+            const view = new ViewModel(viewObj);
+            await view.save();
+
         } catch (err) {
-            res.send({
-                state: 'error',
-                message: '收藏失败:',
-            })
+            console.log(err)
         }
+        res.send({
+                        state: 'success',
+                        message: '收集成功！'
+                    });
     }
 
 
@@ -68,7 +51,7 @@ class Moji {
             let user = await UserModel.findOne({ openId: req.session.openId });
             queryObj.user = user._id
         }
-        await ViewModel.find(queryObj).populate('faceCard').sort({
+        await ViewModel.find(queryObj).populate('user').sort({
             createDate: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
             const totalItems = await ViewModel.count(queryObj);

@@ -14,7 +14,8 @@ const {
 	Admin,
 	Star,
 	User,
-	FaceCard
+	FaceCard,
+	View
 } = require("../controller");
 const {
 	service,
@@ -56,6 +57,8 @@ router.get("/faceCard/getAll", authAdmin, FaceCard.getAll);
 router.post("/faceCard/addOne",authAdmin, FaceCard.addOne);
 router.post("/faceCard/updateOne",authAdmin, FaceCard.updateOne);
 router.get("/faceCard/deleteOne",authAdmin, FaceCard.deleteOne);
+
+router.get("/view/getAll",authAdmin, View.getAll);
 
 function base64_encode(file) {
 	var bitmap = fs.readFileSync(path.join(__dirname,"../../",file));
