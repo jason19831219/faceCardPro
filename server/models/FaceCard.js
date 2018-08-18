@@ -45,6 +45,11 @@ var FaceCardSchema = new Schema({
         enum : ['NEW','OLD'],
         default: 'NEW'
     },
+    hairLength: {
+        type: String,
+        enum : ['SHORT','NORMAL','LONG'],
+        default: 'NORMAL'
+    },
     hairQuality: {
         type: String,
         enum : ['SOFT','NORMAL','HARD'],

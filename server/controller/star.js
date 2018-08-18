@@ -125,13 +125,6 @@ class Star {
         }else {
             var list = await StarModel.find(queryObj).exec();
             if(list.length<21){
-                // var randomList = service.randomArray(list.length-1, list.length);
-                // console.log('randomList'+randomList);
-                // console.log('list.length'+list.length);
-                // var templist = [];
-                // for (var i =0; i<20; i++){
-                //     templist.push(list[randomList[i]])
-                // }
                 list = _.shuffle(list);
                 delete queryObj.yaw;
                 var secondList = await StarModel.find(queryObj).exec();
@@ -142,11 +135,6 @@ class Star {
                     }
                 })
             }else{
-                // var randomList = service.randomArray(20, list.length)
-                // var templist = []
-                // for (var i =0; i<20; i++){
-                //     templist.push(list[randomList[i]])
-                // }
                 var templist = _.shuffle(list);
 
                 for (var i =0; i<20; i++){

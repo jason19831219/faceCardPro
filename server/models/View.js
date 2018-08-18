@@ -25,6 +25,11 @@ var ViewSchema = new Schema({
 		ref: "User",
 		require: true
 	},
+	event: {
+        type: String,
+        enum : ['CLICK','RECOMMEND','RETRY','SHARE','MOMENTS','EDIT'],
+        default: 'CLICK'
+	},
 	createDate: {
 		type: Date,
 		default: Date.now

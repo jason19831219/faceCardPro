@@ -1,10 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/view/Home'
-import User from '@/view/User'
-import Admin from '@/view/Admin'
-import Star from '@/view/Star'
-import FaceCard from '@/view/FaceCard'
+// import Home from  '@/view/Home'
+// const Home = () => import(/* webpackChunkName: "Home" */ '@/view/Home')
+const User = () => import(/* webpackChunkName: "User" */ '@/view/User')
+const Admin = () => import(/* webpackChunkName: "Admin" */ '@/view/Admin')
+const Star = () => import(/* webpackChunkName: "Star" */ '@/view/Star')
+const FaceCard = () => import(/* webpackChunkName: "FaceCard" */ '@/view/FaceCard')
+// import User from '@/view/User'
+// import Admin from '@/view/Admin'
+// import Star from '@/view/Star'
+// import FaceCard from '@/view/FaceCard'
+
+const Home = require('@/view/Home')
+
+Home.chunkName = 'ddd'
+
 Vue.use(Router)
 
 export default new Router({

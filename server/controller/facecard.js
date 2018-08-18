@@ -82,7 +82,6 @@ class FaceCard {
         var random = Math.floor(Math.random() * number);
 
         await FaceCardModel.find(queryObj).limit(1).skip(random).exec(function (err, comments) {
-            console.log(comments)
             res.send({
                 state: 'success',
                 faceCard: comments[0].id,
@@ -117,6 +116,7 @@ class FaceCard {
             sidePhoto: fields.sidePhoto,
             backPhoto: fields.backPhoto,
             star: fields.star,
+            hairLength: fields.hairLength,
             hairQuality: fields.hairQuality,
             hairQuantity: fields.hairQuantity,
             hairGranularity: fields.hairGranularity,
@@ -195,6 +195,7 @@ class FaceCard {
                 sidePhoto: fields.sidePhoto,
                 backPhoto: fields.backPhoto,
                 star: fields.star,
+                hairLength: fields.hairLength,
                 hairQuality: fields.hairQuality,
                 hairQuantity: fields.hairQuantity,
                 hairGranularity: fields.hairGranularity,
