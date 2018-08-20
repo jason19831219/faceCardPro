@@ -18,6 +18,7 @@
         <el-menu-item index="/admin">管理员</el-menu-item>
         <el-menu-item index="/user">用户</el-menu-item>
         <el-menu-item index="/faceCard">脸卡</el-menu-item>
+        <el-menu-item index="/record">记录</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 

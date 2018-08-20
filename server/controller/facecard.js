@@ -12,8 +12,13 @@ class FaceCard {
         let pageNumber = req.query.pageNumber || 1;
         let pageSize = req.query.pageSize || 10;
         let searchkey = req.query.searchkey;
+        let frontFlag = req.query.frontFlag || false;
         let faceCardId = req.query.faceCardId;
         let author = req.query.user;
+        let gender = req.query.gender;
+        let faceShape = req.query.faceShape;
+        let yaw = req.query.yaw;
+        let yawMinus = req.query.yawMinus;
         let queryObj = {};
         if (faceCardId) {
             queryObj._id = faceCardId;
@@ -25,29 +30,74 @@ class FaceCard {
         if (author) {
             queryObj.author = author;
         }
+        if (gender) {
+            queryObj.gender = gender;
+        }
+        if (faceShape) {
+            queryObj.face_shape = faceShape;
+        }
+        if (faceShape) {
+            queryObj.yaw = { $gt : yawMinus, $lt : yaw }
+        }
         queryObj.imgSrc = {$ne: []}
         queryObj.isRemove = 0;
 
-        if (req.session.skey) {
-            let user = await UserModel.findOne({skey: req.session.skey});
-            queryObj.author = user._id
-        }
-        await FaceCardModel.find(queryObj).populate('star').sort({
-            createDate: -1
-        }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
-            const totalItems = await FaceCardModel.count(queryObj);
+
+
+
+
+        if(!frontFlag){
+            if (req.session.skey) {
+                let user = await UserModel.findOne({skey: req.session.skey});
+                queryObj.author = user._id
+            }
+            await FaceCardModel.find(queryObj).populate('star').sort({
+                createDate: -1
+            }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
+                const totalItems = await FaceCardModel.count(queryObj);
+                res.send({
+                    state: 'success',
+                    list: comments,
+                    pageInfo: {
+                        totalItems,
+                        pageNumber: Number(pageNumber) || 1,
+                        pageSize: Number(pageSize) || 10,
+                        searchkey: searchkey || ''
+                    }
+                })
+            });
+        }else {
+            var list = await FaceCardModel.find(queryObj).exec();
+            if(list.length<21){
+                list = _.shuffle(list);
+                delete queryObj.yaw;
+                var secondList = await StarModel.find(queryObj).exec();
+                secondList = _.shuffle(secondList);
+                secondList.forEach(function (value) {
+                    if(list.length<21){
+                        list.push(value)
+                    }
+                })
+            }else{
+                var templist = _.shuffle(list);
+
+                for (var i =0; i<20; i++){
+                    list.push(templist[i])
+                }
+            }
+
             res.send({
                 state: 'success',
-                list: comments,
+                list: list,
                 pageInfo: {
-                    totalItems,
-                    pageNumber: Number(pageNumber) || 1,
-                    pageSize: Number(pageSize) || 10,
-                    searchkey: searchkey || ''
                 }
             })
-        });
+
+        }
     }
+
+
+
 
     async getOne(req, res, next) {
         let faceCardId = req.query.faceCardId;

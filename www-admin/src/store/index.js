@@ -9,6 +9,7 @@ import Admin from './admin'
 import Star from './star'
 import User from './user'
 import FaceCard from './faceCard'
+import View from './view'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     admin: Admin,
     star: Star,
     user: User,
-    faceCard: FaceCard
+    faceCard: FaceCard,
+    view: View
   }
 })

@@ -51,7 +51,7 @@ class Moji {
             let user = await UserModel.findOne({ openId: req.session.openId });
             queryObj.user = user._id
         }
-        await ViewModel.find(queryObj).populate('user').sort({
+        await ViewModel.find(queryObj).populate('user').populate('faceCard').sort({
             createDate: -1
         }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
             const totalItems = await ViewModel.count(queryObj);

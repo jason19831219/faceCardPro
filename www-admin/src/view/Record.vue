@@ -2,203 +2,36 @@
   <div>
     <el-table
       :data="list"
-      style="width: 100%"
+      style="width: 100%; "
+      row-style="height: 100px"
       ref="table">
       <el-table-column
-        prop="author"
-        label="author"
-        width="400"
-        show-overflow-tooltip>
+        prop="user"
+        label="用户"
+        show-overflow-tooltip
+        width="800">
+
+        <template slot-scope="scope">
+          <p>{{scope.row.user.wxUserInfo.openId}}</p>
+          <p>{{scope.row.user.wxUserInfo.nickName}}</p>
+          <p>{{scope.row.user.wxUserInfo.city}}</p>
+          <p>{{scope.row.user.wxUserInfo.country}}</p>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="facePhoto"
-        label="facePhoto"
-        width="400"
+        prop="faceCard"
+        label="脸卡id"
+        width="800"
         show-overflow-tooltip>
+        <template slot-scope="scope">
+          <p>{{scope.row.faceCard.id}}</p>
+          <p>{{scope.row.faceCard.district}}</p>
+          <p>{{scope.row.faceCard.createDate}}</p>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="sidePhoto"
-        label="sidePhoto"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="backPhoto"
-        label="backPhoto"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="recommendPic"
-        label="recommendPic"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="likeNum"
-        label="likeNum"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="likeUserIds"
-        label="likeUserIds"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="clickNum"
-        label="clickNum"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="isTop"
-        label="isTop"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="street"
-        label="street"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="district"
-        label="district"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="city"
-        label="city"
-        width="400"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="age"
-        label="age"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="hairParam"
-        label="hairParam"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="hairQuality"
-        label="hairQuality"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="hairQuantity"
-        label="hairQuantity"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="hairGranularity"
-        label="hairGranularity"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="hairCrispation"
-        label="hairCrispation"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="yaw"
-        label="yaw"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="pitch"
-        label="pitch"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="roll"
-        label="roll"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="beauty"
-        label="beauty"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="expression"
-        label="expression"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="face_probability"
-        label="face_probability"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="face_shape"
-        label="face_shape"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="face_token"
-        label="face_token"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="gender"
-        label="gender"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="glasses"
-        label="glasses"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="landmark"
-        label="landmark"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="landmark72"
-        label="landmark72"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="location"
-        label="location"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="race"
-        label="race"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="editDate"
-        label="editDate"
+        prop="event"
+        label="行为"
         width="200"
         show-overflow-tooltip>
       </el-table-column>
@@ -207,30 +40,30 @@
         label="createDate"
         width="200">
       </el-table-column>
-      <el-table-column
-        prop="updateDate"
-        sortable
-        label="updateDate"
-        width="200">
-      </el-table-column>
-      <el-table-column
-        fixed="right"
-        label="操作"
-        width="400">
-        <template slot-scope="scope">
-          <el-button
-            type="primary"
-            @click="handleUpdate(scope.$index)"
-            size="small">
-            修改
-          </el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.$index)">删除
-          </el-button>
-        </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="updateDate"-->
+        <!--sortable-->
+        <!--label="updateDate"-->
+        <!--width="200">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+        <!--fixed="right"-->
+        <!--label="操作"-->
+        <!--width="400">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-button-->
+            <!--type="primary"-->
+            <!--@click="handleUpdate(scope.$index)"-->
+            <!--size="small">-->
+            <!--修改-->
+          <!--</el-button>-->
+          <!--<el-button-->
+            <!--size="small"-->
+            <!--type="danger"-->
+            <!--@click="handleDelete(scope.$index)">删除-->
+          <!--</el-button>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
     </el-table>
     <el-pagination
       @size-change="handleSizeChange"
@@ -246,13 +79,14 @@
 
 <script>
 import {mapGetters} from 'vuex'
-
+import $ from 'jquery'
 export default {
   methods: {
     handleSizeChange (val) {
       this.$store.dispatch('view/setPageSize', val)
     },
     handleCurrentChange (val) {
+      console.log($('el-pagination'))
       this.$store.dispatch('view/setPageNumber', val)
     }
   },

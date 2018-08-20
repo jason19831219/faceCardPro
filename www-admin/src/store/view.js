@@ -1,7 +1,6 @@
 import api from '@/api'
-import { Message } from 'element-ui'
+// import { Message } from 'element-ui'
 // import validatorUtil from '@/utils/validation'
-
 const state = () => ({
   list: [],
   listInfo: {
@@ -16,13 +15,12 @@ const mutations = {
   'receiveList' (state, {list, pageInfo}) {
     state.list = list
     state.listInfo = pageInfo
-    state.itemDialog.visable = false
   }
 }
 
 const actions = {
   async 'getAll' ({commit, state}) {
-    const {data} = await api.get('faceCard/getAll', {...state.listInfo})
+    const {data} = await api.get('view/getAll', {...state.listInfo})
     if (data.list && data.state === 'success') {
       commit('receiveList', {...data})
     }
