@@ -184,7 +184,10 @@ FaceCardSchema.set("toJSON", {getters: true, virtuals: true});
 FaceCardSchema.set("toObject", {getters: true, virtuals: true});
 
 FaceCardSchema.path("createDate").get(function (v) {
-	return moment(v).startOf("minute").fromNow();
+    // var timeToChange = moment().add(-1, 'days').format('X')
+    // console.log(moment(v).format('X') > timeToChange)
+	// return moment(v).startOf("minute").fromNow();
+    return moment(v).format('X');
 });
 FaceCardSchema.path("updateDate").get(function (v) {
 	return moment(v).startOf("minute").fromNow();

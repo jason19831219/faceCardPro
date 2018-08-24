@@ -4,6 +4,7 @@ const ViewModel = require("../models").View;
 const {settings, service} = require('../../utils');
 const _ = require('lodash');
 const chinaTime = require('china-time');
+const moment = require("moment");
 
 
 class FaceCard {
@@ -37,23 +38,29 @@ class FaceCard {
             queryObj.face_shape = faceShape;
         }
         if (faceShape) {
-            queryObj.yaw = { $gt : yawMinus, $lt : yaw }
+            queryObj.yaw = {$gt: yawMinus, $lt: yaw}
         }
+
         queryObj.imgSrc = {$ne: []}
         queryObj.isRemove = 0;
+        var timeToChange = moment().add(-1, 'days').format('X')
 
-
-
-
-
-        if(!frontFlag){
+        if (!frontFlag) {
             if (req.session.skey) {
                 let user = await UserModel.findOne({skey: req.session.skey});
                 queryObj.author = user._id
             }
+
             await FaceCardModel.find(queryObj).populate('star').sort({
                 createDate: -1
-            }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
+            }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).lean().exec(async function (err, comments) {
+                comments.forEach(function (value) {
+                    if (moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').format('X') > timeToChange) {
+                        value.createDate = moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').startOf("minute").fromNow()
+                    } else {
+                        value.createDate = moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').format('M月D日')
+                    }
+                })
                 const totalItems = await FaceCardModel.count(queryObj);
                 res.send({
                     state: 'success',
@@ -66,37 +73,52 @@ class FaceCard {
                     }
                 })
             });
-        }else {
-            var list = await FaceCardModel.find(queryObj).exec();
-            if(list.length<21){
+        } else {
+            queryObj.isTop = 1;
+            var list = await FaceCardModel.find(queryObj).populate('author').lean().exec();
+            list.forEach(function (value) {
+                if (moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').format('X') > timeToChange) {
+                    value.createDate = moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').startOf("minute").fromNow()
+                } else {
+                    value.createDate = moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').format('M月D日')
+                }
+            })
+
+
+            if (list.length < 21) {
                 list = _.shuffle(list);
                 delete queryObj.yaw;
-                var secondList = await StarModel.find(queryObj).exec();
+                var secondList = await FaceCardModel.find(queryObj).populate('author').exec();
                 secondList = _.shuffle(secondList);
                 secondList.forEach(function (value) {
-                    if(list.length<21){
+                    // if(value.createDate>timeToChange){
+                    //     value.createDate = moment(value.createDate).startOf("minute").fromNow()
+                    // }else{
+                    //     value.createDate = moment(value.createDate).format('YYYY-MM-DD')
+                    // }
+                    // console.log(value.createDate);
+
+                    if (list.length < 21) {
                         list.push(value)
                     }
                 })
-            }else{
+            } else {
                 var templist = _.shuffle(list);
 
-                for (var i =0; i<20; i++){
+                for (var i = 0; i < 20; i++) {
                     list.push(templist[i])
                 }
             }
+            console.log('sdfsdf')
 
             res.send({
                 state: 'success',
                 list: list,
-                pageInfo: {
-                }
+                pageInfo: {}
             })
 
         }
     }
-
-
 
 
     async getOne(req, res, next) {
@@ -129,7 +151,6 @@ class FaceCard {
 
 
         var number = await FaceCardModel.count(queryObj);
-        console.log(number);
         var random = Math.floor(Math.random() * number);
 
         await FaceCardModel.find(queryObj).limit(1).skip(random).exec(function (err, comments) {
@@ -209,7 +230,6 @@ class FaceCard {
             } else {
                 const newFaceCard = new FaceCardModel(faceCardObj);
                 await newFaceCard.save();
-                console.log(newFaceCard)
                 res.send({
                     state: 'success',
                     data: {
@@ -246,11 +266,11 @@ class FaceCard {
                 sidePhoto: fields.sidePhoto,
                 backPhoto: fields.backPhoto,
                 star: fields.star,
-                hairLength: fields.hairLength,
-                hairQuality: fields.hairQuality,
-                hairQuantity: fields.hairQuantity,
-                hairGranularity: fields.hairGranularity,
-                hairCrispation: fields.hairCrispation,
+                hairLength: fields.hairLength||'NORMAL',
+                hairQuality: fields.hairQuality||'SOFT',
+                hairQuantity: fields.hairQuantity||'LOT',
+                hairGranularity: fields.hairGranularity||'NORMAL',
+                hairCrispation: fields.hairCrispation||'NONE',
                 age: fields.age,
                 yaw: fields.yaw,
                 pitch: fields.pitch,
@@ -266,14 +286,13 @@ class FaceCard {
                 landmark72: fields.landmark72,
                 location: fields.location,
                 race: fields.race,
-                isTop: fields.isTop,
+                isTop: fields.isTop||1,
                 street: fields.street,
                 district: fields.district,
                 city: fields.city,
                 editDate: time
             }
 
-            console.log(fields.author+fields._id+'sdfsdfsdf')
 
             if (fields.author) {
                 faceCardObj.author = fields.author

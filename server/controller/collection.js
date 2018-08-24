@@ -2,6 +2,7 @@ const CollectionModel = require("../models").Collection;
 const UserModel = require("../models").User;
 const {settings, service} = require('../../utils');
 const _ = require('lodash');
+const moment = require('moment')
 
 class Moji {
 
@@ -26,11 +27,24 @@ class Moji {
         var collectionObj = {
             faceCard: fields.faceCardId
         }
-
+        let queryObj = {};
         if(fields.user){
             collectionObj.user = fields.user
+            queryObj.user = fields.user
         }else{
             collectionObj.user = req.session.userId
+            queryObj.user = req.session.userId
+        }
+
+        const totalItems = await CollectionModel.count(queryObj);
+        console.log(totalItems)
+        if(totalItems>=50){
+            res.send({
+                state: 'error',
+                totalItem:totalItems,
+                message: '超过收藏上限',
+            })
+            return;
         }
 
         try {
@@ -86,10 +100,23 @@ class Moji {
             let user = await UserModel.findOne({ openId: req.session.openId });
             queryObj.user = user._id
         }
+        console.log(req.session.openId)
+        var timeToChange = moment().add(-1, 'days').format('X')
         await CollectionModel.find(queryObj).populate('faceCard').sort({
             createDate: -1
-        }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec(async function (err, comments) {
+        }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).lean().exec(async function (err, comments) {
             const totalItems = await CollectionModel.count(queryObj);
+            comments.forEach(function (value) {
+                if(value.faceCard){
+                    if (moment(value.faceCard.createDate, 'YYYY-MM-DD HH:mm:ss').format('X') > timeToChange) {
+                        value.faceCard.createDate = moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').startOf("minute").fromNow()
+                    } else {
+                        value.faceCard.createDate = moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').format('M月D日')
+                    }
+                }else{
+                    console.log(value.faceCard)
+                }
+            })
             res.send({
                 state: 'success',
                 list: comments,

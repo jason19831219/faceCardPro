@@ -127,7 +127,6 @@ router.post("/uploads", (req, res, next) => {
 router.get("/login", wxAuth.authorization, User.wxLogin);
 router.get("/star/getAll", wxAuth.authorization, Star.getAll);
 
-router.get("/faceCard/getRandomAll", wxAuth.authorization, FaceCard.getRandomAll);
 router.get("/faceCard/getAll", wxAuth.authorization, FaceCard.getAll);
 router.get("/faceCard/getOne", FaceCard.getOne);
 router.post("/faceCard/addOne", wxAuth.authorization, FaceCard.addOne);
