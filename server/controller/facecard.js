@@ -45,6 +45,8 @@ class FaceCard {
         queryObj.isRemove = 0;
         var timeToChange = moment().add(-1, 'days').format('X')
 
+        console.log(frontFlag)
+
         if (!frontFlag) {
             if (req.session.skey) {
                 let user = await UserModel.findOne({skey: req.session.skey});
@@ -75,6 +77,9 @@ class FaceCard {
             });
         } else {
             queryObj.isTop = 1;
+            var authorId = req.session.userId;
+            queryObj.author = {$ne: authorId}
+
             var list = await FaceCardModel.find(queryObj).populate('author').lean().exec();
             list.forEach(function (value) {
                 if (moment(value.createDate, 'YYYY-MM-DD HH:mm:ss').format('X') > timeToChange) {
@@ -286,7 +291,7 @@ class FaceCard {
                 landmark72: fields.landmark72,
                 location: fields.location,
                 race: fields.race,
-                isTop: fields.isTop||1,
+                isTop: fields.isTop===0? 0:1,
                 street: fields.street,
                 district: fields.district,
                 city: fields.city,

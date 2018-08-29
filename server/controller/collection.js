@@ -47,6 +47,8 @@ class Moji {
             return;
         }
 
+        console.log(collectionObj)
+
         try {
             let collection = await CollectionModel.findOne(collectionObj)
             if (!_.isEmpty(collection)) {

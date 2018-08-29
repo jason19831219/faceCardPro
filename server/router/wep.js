@@ -74,12 +74,19 @@ router.post("/startAipFace", function (req, res, next) {
     options["max_face_num"] = "1";
 
     client.detect(image, imageType, options).then(function (result) {
+        console.log(result)
         if (!result.error_code) {
             res.send(
                 {
                     state: "success",
                     message: "分析成功",
                     info: result.result.face_list
+                });
+        }else {
+            res.send(
+                {
+                    state: "error",
+                    message: "分析失败"
                 });
         }
 

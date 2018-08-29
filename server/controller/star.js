@@ -49,20 +49,20 @@ class Star {
         }
 
         try {
-            let star = await StarModel.find({name: fields.name})
-            if (!_.isEmpty(star)) {
-                res.send({
-                    state: 'error',
-                    message: '名字已存在！'
-                });
-            } else {
+            // let star = await StarModel.find({name: fields.name})
+            // if (!_.isEmpty(star)) {
+            //     res.send({
+            //         state: 'error',
+            //         message: '名字已存在！'
+            //     });
+            // } else {
                 const newStarSet = new StarModel(starObj);
                 await newStarSet.save();
                 res.send({
                     state: 'success',
                     id: 'Star已保存'
                 });
-            }
+            // }
         } catch (err) {
             res.send({
                 state: 'error',
