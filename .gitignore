@@ -1,3 +1,7 @@
 utils/1529871730876.key
 utils/1529871730876.pem
+utils/settings.js
 public/upload/images
+.idea/
+node_modules/
+package-lock.json
