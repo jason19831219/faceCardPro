@@ -8,6 +8,11 @@
       style="width: 100%"
       ref="table">
       <el-table-column
+        prop="_id"
+        label="_id"
+        width="100">
+      </el-table-column>
+      <el-table-column
         prop="userName"
         label="userName"
         width="400">
@@ -79,8 +84,8 @@
     </el-pagination>
     <el-dialog :title="itemDialog.title" :visible.sync="itemDialog.visable">
       <el-form :model="itemForm" :rules="itemRule" ref="itemForm">
-        <el-form-item label="userName" prop="userName">
-          <el-input placeholder="请输入userName" v-model="itemForm.userName"></el-input>
+        <el-form-item label="id" prop="_id">
+          <el-input placeholder="请输入userName" v-model="itemForm._id"></el-input>
         </el-form-item>
         <el-form-item v-if="itemDialog.title !== '删除'" label="password" prop="password">
           <el-input placeholder="请输入password" v-model="itemForm.password"></el-input>
@@ -88,16 +93,16 @@
         <el-form-item v-if="itemDialog.title !== '删除'" label="passwordConfirmed" prop="passwordConfirmed">
           <el-input placeholder="请输入passwordConfirmed" v-model="itemForm.passwordConfirmed"></el-input>
         </el-form-item>
-        <el-form-item label="mobile" prop="mobile">
-          <el-input placeholder="请输入mobile" v-model="itemForm.mobile"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="mobile" prop="mobile">-->
+          <!--<el-input placeholder="请输入mobile" v-model="itemForm.mobile"></el-input>-->
+        <!--</el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="itemDialog.visable = false">取 消</el-button>
         <el-button v-if="itemDialog.title == '添加'" type="primary" @click="addOne('itemForm')">{{itemDialog.title}}
         </el-button>
-        <el-button v-if="itemDialog.title == '修改'" type="primary" @click="updateOne('itemForm')">{{itemDialog.title}}
-        </el-button>
+        <!--<el-button v-if="itemDialog.title == '修改'" type="primary" @click="updateOne('itemForm')">{{itemDialog.title}}-->
+        <!--</el-button>-->
         <el-button v-if="itemDialog.title == '删除'" type="primary" @click="deleteOne('itemForm')">{{itemDialog.title}}
         </el-button>
       </div>

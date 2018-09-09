@@ -451,6 +451,28 @@ class User {
 
     }
 
+    async deleteOne(req, res, next) {
+        try {
+            let errMsg = '';
+            if (!service.checkCurrentId(req.query.ids)) {
+                errMsg = '非法请求，请稍后重试！';
+            }
+            if (errMsg) {
+                throw new service.UserException(errMsg);
+            }
+            await UserModel.remove({_id: req.query.ids});
+            res.send({
+                state: 'success'
+            });
+        } catch (err) {
+            res.send({
+                state: 'error',
+                type: 'ERROR_IN_SAVE_DATA',
+                message: '删除数据失败:' + err,
+            })
+        }
+    }
+
 
 }
 

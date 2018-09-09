@@ -38,7 +38,7 @@ var FaceCardSchema = new Schema({
     },
     recommendPic: {
         type: [String],
-        default: []
+        default: []s
     },
     hairParam: {
         type: String,

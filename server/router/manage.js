@@ -51,7 +51,7 @@ router.get("/star/deleteOne",authAdmin, Star.deleteOne);
 router.get("/user/getAll", authAdmin, User.getAll);
 // router.post("/user/addOne",authAdmin, User.addOne);
 // router.post("/user/updateOne",authAdmin, User.updateOne);
-// router.get("/user/deleteOne",authAdmin, User.deleteOne);
+router.get("/user/deleteOne",authAdmin, User.deleteOne);
 
 router.get("/faceCard/getAll", authAdmin, FaceCard.getAll);
 router.post("/faceCard/addOne",authAdmin, FaceCard.addOne);

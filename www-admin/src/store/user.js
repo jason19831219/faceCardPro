@@ -163,6 +163,7 @@ const actions = {
       }
     } else {
       state.itemForm = state.list[index]
+      console.log(state.itemForm)
     }
   }
 }
