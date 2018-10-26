@@ -6,7 +6,7 @@ const User = () => import(/* webpackChunkName: "User" */ '@/view/User')
 const Admin = () => import(/* webpackChunkName: "Admin" */ '@/view/Admin')
 const Star = () => import(/* webpackChunkName: "Star" */ '@/view/Star')
 const FaceCard = () => import(/* webpackChunkName: "FaceCard" */ '@/view/FaceCard')
-const Record = () => import(/* webpackChunkName: "FaceCard" */ '@/view/Record')
+const Record = () => import(/* webpackChunkName: "Record" */ '@/view/Record')
 // import User from '@/view/User'
 // import Admin from '@/view/Admin'
 // import Star from '@/view/Star'
