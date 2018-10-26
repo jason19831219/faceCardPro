@@ -97,61 +97,61 @@
       <el-table-column
         prop="hairParam"
         label="hairParam"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="hairQuality"
         label="hairQuality"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="hairQuantity"
         label="hairQuantity"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="hairGranularity"
         label="hairGranularity"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="hairCrispation"
         label="hairCrispation"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="yaw"
         label="yaw"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="pitch"
         label="pitch"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="roll"
         label="roll"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="beauty"
         label="beauty"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="expression"
         label="expression"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -163,25 +163,25 @@
       <el-table-column
         prop="face_shape"
         label="face_shape"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="face_token"
         label="face_token"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="gender"
         label="gender"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="glasses"
         label="glasses"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
