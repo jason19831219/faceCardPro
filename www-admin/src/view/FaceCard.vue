@@ -25,14 +25,20 @@
       <el-table-column
         prop="sidePhoto"
         label="sidePhoto"
-        width="400"
+        width="100"
         show-overflow-tooltip>
+          <template   slot-scope="scope">
+              <img :src="scope.row.sidePhoto"  min-width="70" height="70" />
+          </template>
       </el-table-column>
       <el-table-column
         prop="backPhoto"
         label="backPhoto"
-        width="400"
+        width="100"
         show-overflow-tooltip>
+          <template   slot-scope="scope">
+              <img :src="scope.row.backPhoto"  min-width="70" height="70" />
+          </template>
       </el-table-column>
       <el-table-column
         prop="recommendPic"
