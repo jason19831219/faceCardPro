@@ -49,7 +49,7 @@
       <el-table-column
         prop="likeNum"
         label="likeNum"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -61,13 +61,13 @@
       <el-table-column
         prop="clickNum"
         label="clickNum"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="isTop"
         label="isTop"
-        width="50"
+        width="100"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
