@@ -17,7 +17,7 @@
             <el-table-column
                     prop="src"
                     label="src"
-                    width="400"
+                    width="100"
                     show-overflow-tooltip>
                 <template slot-scope="scope">
                     <img :src="scope.row.src" min-width="70" height="70"/>

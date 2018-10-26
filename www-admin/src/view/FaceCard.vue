@@ -16,7 +16,7 @@
       <el-table-column
         prop="facePhoto"
         label="facePhoto"
-        width="400"
+        width="100"
         show-overflow-tooltip>
         <template   slot-scope="scope">
           <img :src="scope.row.facePhoto"  min-width="70" height="70" />
