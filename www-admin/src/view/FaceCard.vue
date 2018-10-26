@@ -10,7 +10,7 @@
       <el-table-column
         prop="author"
         label="author"
-        width="400"
+        width="200"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
