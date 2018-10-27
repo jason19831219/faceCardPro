@@ -68,6 +68,7 @@
             <el-table-column
                     prop="face_shape"
                     label="face_shape"
+                    sortable
                     width="200"
                     show-overflow-tooltip>
             </el-table-column>
@@ -80,6 +81,7 @@
             <el-table-column
                     prop="gender"
                     label="gender"
+                    sortable
                     width="200"
                     show-overflow-tooltip>
             </el-table-column>

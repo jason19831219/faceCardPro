@@ -163,6 +163,7 @@
       <el-table-column
         prop="face_shape"
         label="face_shape"
+        sortable
         width="100"
         show-overflow-tooltip>
       </el-table-column>
@@ -175,6 +176,7 @@
       <el-table-column
         prop="gender"
         label="gender"
+        sortable
         width="100"
         show-overflow-tooltip>
       </el-table-column>
@@ -228,7 +230,7 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="400">
+        width="100">
         <template slot-scope="scope">
           <el-button
             type="primary"
