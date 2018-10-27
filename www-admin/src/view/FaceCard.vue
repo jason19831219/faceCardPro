@@ -250,7 +250,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page=listInfo.pageNumber
-      :page-sizes="[10,20,50,100]"
+      :page-sizes="[10,20,50,100,500]"
       :page-size=listInfo.pageSize
       layout="total, sizes, prev, pager, next, jumper"
       :total=listInfo.totalItems>
