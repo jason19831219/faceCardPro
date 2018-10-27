@@ -129,7 +129,7 @@
             <el-table-column
                     fixed="right"
                     label="操作"
-                    width="400">
+                    width="200">
                 <template slot-scope="scope">
                     <el-button
                             type="primary"
