@@ -37,6 +37,7 @@ class User {
     if (faceShape) {
       queryObj.face_shape = faceShape
     }
+    console.log(queryObj)
     const users = await UserModel.find(queryObj).populate('password', '-salt').sort({
       updateDate: -1
     }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec()
