@@ -107,6 +107,7 @@ class Star {
       const list = await StarModel.find(queryObj).sort({
         updateTime: -1
       }).skip(Number(pageSize) * (Number(pageNumber) - 1)).limit(Number(pageSize)).exec()
+      console.log(list)
       const totalItems = await StarModel.count(queryObj)
       res.send({
         state: 'success',
