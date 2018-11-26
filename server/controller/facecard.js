@@ -35,7 +35,7 @@ class FaceCard {
     if (faceShape) {
       queryObj.face_shape = faceShape
     }
-    if (faceShape&&frontFlag) {
+    if (yawMinus) {
       queryObj.yaw = {$gt: yawMinus, $lt: yaw}
     }
 
