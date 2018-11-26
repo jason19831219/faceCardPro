@@ -3,6 +3,25 @@
     <div>
       <el-button size="small" type="primary" @click="handleAdd('itemForm')">添加</el-button>
     </div>
+     <div style="margin-top: 20px">
+         <span size="small" type="disable">筛选:</span>
+         <el-select v-model="genderSelectionResult" placeholder="请选择性别" v-on:change="getAllWithFilter()">
+             <el-option
+                     v-for="item in genderSelectionList"
+                     :key="item.value"
+                     :label="item.label"
+                     :value="item.value">
+             </el-option>
+         </el-select>
+         <el-select v-model="faceShapeSelectionResult" placeholder="请选择脸型" v-on:change="getAllWithFilter()">
+             <el-option
+                     v-for="item in faceShapeSelectionList"
+                     :key="item.value"
+                     :label="item.label"
+                     :value="item.value">
+             </el-option>
+         </el-select>
+     </div>
     <el-table
       :data="list"
       style="width: 100%"
@@ -18,9 +37,18 @@
         label="facePhoto"
         width="100"
         show-overflow-tooltip>
+          <template slot="header">
+              <div class="sdf" style="width: 100px; height: 100px; background: black; top: 0; left: 0;">
+                  ddd
+              </div>
+          </template>
+          <div class="sdf" style="position: absolute; width: 100px; height: 100px; background: black; top: 0; left: 0;">
+              ddd
+          </div>
         <template   slot-scope="scope">
           <img :src="scope.row.facePhoto"  min-width="70" height="70" />
         </template>
+
       </el-table-column>
       <el-table-column
         prop="sidePhoto"
@@ -400,6 +428,12 @@ export default {
         }
       })
     },
+    getAllWithFilter () {
+      this.$store.dispatch('faceCard/getAll', {
+        gender: ((this.genderSelectionResult === '') || (this.genderSelectionResult === 'all')) ? '' : this.genderSelectionResult,
+        faceShape: this.faceShapeSelectionResult === '' || this.faceShapeSelectionResult === 'all' ? '' : this.faceShapeSelectionResult
+      })
+    },
     handleSizeChange (val) {
       this.$store.dispatch('faceCard/setPageSize', val)
     },
@@ -425,7 +459,42 @@ export default {
   },
   data () {
     return {
-      src: ''
+      src: '',
+      genderSelectionList: [
+        {
+          value: 'all',
+          label: '全部'
+        }, {
+          value: 'male',
+          label: '男'
+        }, {
+          value: 'female',
+          label: '女'
+        }
+      ],
+      genderSelectionResult: '',
+      faceShapeSelectionList: [
+        {
+          value: 'all',
+          label: '全部'
+        }, {
+          value: 'square',
+          label: '正方形'
+        }, {
+          value: 'heart',
+          label: '心型'
+        }, {
+          value: 'oval',
+          label: '椭圆形'
+        }, {
+          value: 'round',
+          label: '圆形'
+        }, {
+          value: 'triangle',
+          label: '三角形'
+        }
+      ],
+      faceShapeSelectionResult: ''
     }
   },
   mounted () {
@@ -434,7 +503,6 @@ export default {
 }
 </script>
 <style scoped="scoped">
-
   .img-upload-btn {
     cursor: pointer;
     display: inline-block;
