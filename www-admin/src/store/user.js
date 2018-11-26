@@ -94,8 +94,8 @@ const mutations = {
 }
 
 const actions = {
-  async 'getAll' ({commit, state}) {
-    const {data} = await api.get('user/getAll', {...state.listPageInfo}, true)
+  async 'getAll' ({commit, state}, params) {
+    const {data} = await api.get('user/getAll', {...state.listPageInfo, ...params}, true)
     if (data.list && data.state === 'success') {
       commit('receiveList', {...data})
     }
