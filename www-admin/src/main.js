@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import { Container, Header, Aside, Menu, MenuItem, Main, Submenu, MenuItemGroup, Form, FormItem, Button, Input, Row, Col, Table, TableColumn, Pagination, Dialog, Message } from 'element-ui'
+import { Container, Header, Aside, Menu, MenuItem, Main, Submenu, MenuItemGroup, Form, FormItem, Button, Input, Row, Col, Table, TableColumn, Pagination, Dialog, Message, Select, Option } from 'element-ui'
 
 Vue.use(Container)
 Vue.use(Main)
@@ -19,6 +19,8 @@ Vue.use(FormItem)
 Vue.use(Button)
 Vue.use(Input)
 Vue.use(Row)
+Vue.use(Select)
+Vue.use(Option)
 Vue.use(Col)
 Vue.use(Table)
 Vue.use(TableColumn)
