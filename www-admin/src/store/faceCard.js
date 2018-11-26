@@ -80,8 +80,8 @@ const mutations = {
 }
 
 const actions = {
-  async 'getAll' ({commit, state}) {
-    const {data} = await api.get('faceCard/getAll', {...state.listInfo})
+  async 'getAll' ({commit, state}, params) {
+    const {data} = await api.get('faceCard/getAll', {...state.listInfo, ...params})
     if (data.list && data.state === 'success') {
       commit('receiveList', {...data})
     }
